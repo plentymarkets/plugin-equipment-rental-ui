@@ -1,0 +1,23 @@
+<terra-alert-panel></terra-alert-panel>
+<terra-2-col mobileRouting>
+
+    <terra-filter left (outputOnSearchBtnClicked)="onSearchBtnClicked()"
+        (outputOnResetBtnClicked)="onResetBtnClicked()"
+        (outputOnEnterSubmit)="onSubmit()">
+        <terra-text-input inputName="Name" [(ngModel)]="_name">
+        </terra-text-input>
+    </terra-filter>
+    <div class="container whiteBackground" right>
+        <terra-card *ngFor="let article of articles" inputImagePath="{{ article.image }}" (click)="onClickTerraCard(article.id)">
+            <div terra-card-header>
+                <p>{{ article.name }}</p>
+            </div>
+            <div terra-card-content>
+                <p>{{ article.description }}</p>
+            </div>
+            <div terra-card-footer>
+                <p>card footer</p>
+            </div>
+        </terra-card>
+    </div>
+</terra-2-col>
