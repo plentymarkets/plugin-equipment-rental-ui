@@ -1,9 +1,7 @@
 import { Component,OnInit } from '@angular/core';
 import { ExampleDataService } from './overview-view.service';
 import { TerraAlertComponent, TerraJsonToFormFieldService } from '@plentymarkets/terra-components';
-import { TranslationService } from 'angular-l10n';
 import { isArray } from 'util';
-import { empty } from 'rxjs/Observer';
 
 interface ArticleInterface
 {
