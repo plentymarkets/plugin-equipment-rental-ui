@@ -18,7 +18,7 @@ export class ExampleDataService extends TerraBaseService
         super(_loadingSpinnerService, _http, '/rest/');
         if(process.env.ENV !== 'production')
         {
-            // tslint:disable-next-line:max-line-length
+            //tslint:disable-next-line:max-line-length
             this.bearer = 'YOUR_TOKEN_HERE';
             this._basePathUrl = 'http://master.login.plentymarkets.com';
             this.url = this._basePathUrl + this.url;

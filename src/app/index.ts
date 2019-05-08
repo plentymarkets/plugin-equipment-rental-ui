@@ -1,2 +1,2 @@
-export * from './plugin-terra-basic.component';
-export * from './plugin-terra-basic.module';
+export * from './plugin-equipment-rental.component';
+export * from './plugin-equipment-rental.module'; 

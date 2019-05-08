@@ -1,0 +1,57 @@
+<terra-alert-panel></terra-alert-panel>
+<terra-3-col [leftColumnWidth]="leftColumnWidth" [centerColumnWidth]="centerColumnWidth" [rightColumnWidth]="rightColumnWidth">
+    <terra-filter left (outputOnSearchBtnClicked)="onSearchBtnClicked()"
+        (outputOnResetBtnClicked)="onResetBtnClicked()"
+        (outputOnEnterSubmit)="onSubmit()">  
+        <terra-text-input inputName="Name" [(ngModel)]="_name">
+        </terra-text-input>
+    </terra-filter>
+    <terra-portlet center>
+        <terra-card *ngFor="let article of articles" inputImagePath="{{ article.image }}" (click)="onClickTerraCard(article.id)">
+            <div terra-card-header>
+                <p>{{ article.name }}</p>
+            </div>
+            <div terra-card-content>
+                <p>{{ article.description }}</p>
+            </div>
+            <div terra-card-footer>
+                <p>card footer</p>
+            </div>
+        </terra-card>
+    </terra-portlet>
+    <div class="rightColumn" right>       
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <terra-portlet>
+                        <terra-button inputIcon='icon-save'></terra-button>
+                        <terra-button inputIcon='icon-navigate_back' (click)="showFirstPage()"></terra-button>
+                    </terra-portlet>
+                </div>
+                <div class="col-md-7">
+                    <terra-portlet>
+                        <h1>Artikel verleihen</h1>
+                        <terra-text-input inputName="Vorname" [(ngModel)]="firstName" (ngModelChange)="emailAutocomplete($event)"></terra-text-input>
+                        <terra-text-input inputName="Nachname" [(ngModel)]="lastName" (ngModelChange)="emailAutocomplete($event)"> </terra-text-input>
+                        <terra-text-input inputName="E-Mail" [(ngModel)]="email"></terra-text-input>
+                        <terra-date-picker
+                            inputName="Ausleihen bis:"
+                            [(ngModel)]="date">
+                        </terra-date-picker>
+                    </terra-portlet>
+                </div>
+                <div class="col-md-5">
+                    <terra-portlet>
+                        <div terra-card-content>
+                        <div *ngIf="articlesResult[_actualArticleKey]">
+                            <h1>{{ articlesResult[_actualArticleKey].name }}</h1>
+                            <img src="{{ articlesResult[_actualArticleKey].image }}" class="img-fluid" alt="{{ articlesResult[_actualArticleKey].name }}">
+                            <p innerHTML="{{ articlesResult[_actualArticleKey].longDescription }}"></p>
+                        </div>
+                    </div>
+                    </terra-portlet>
+                </div>
+            </div>
+        </div>
+    </div>
+</terra-3-col>
