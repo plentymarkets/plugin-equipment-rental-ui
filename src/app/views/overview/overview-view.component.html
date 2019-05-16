@@ -1,4 +1,18 @@
 <terra-alert-panel></terra-alert-panel>
+<terra-base-toolbar>
+    <ul class="terra-breadcrumbs breadcrumbs-overflow-auto">
+        <ng-template ngFor let-page [ngForOf]="breadcrumbs" let-i="index">
+            <li class="terra-breadcrumb-container">
+                <div class="terra-breadcrumb-wrapper">
+                    <a class="terra-breadcrumb" (click)="loadPage(i+1)">{{ page }}</a>
+                </div>
+            </li>
+            <li class="terra-breadcrumb-container" *ngIf="breadcrumbs.length > 1 &&  i == 0">
+                <a class="terra-breadcrumb icon-next"></a>
+            </li>
+        </ng-template>
+    </ul>
+</terra-base-toolbar>
 <terra-3-col [leftColumnWidth]="leftColumnWidth" [centerColumnWidth]="centerColumnWidth" [rightColumnWidth]="rightColumnWidth">
     <terra-filter left (outputOnSearchBtnClicked)="onSearchBtnClicked()"
         (outputOnResetBtnClicked)="onResetBtnClicked()"
@@ -23,10 +37,14 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-12">
-                    <terra-portlet>
-                        <terra-button inputIcon='icon-save'></terra-button>
-                        <terra-button inputIcon='icon-navigate_back' (click)="showFirstPage()"></terra-button>
-                    </terra-portlet>
+                    <terra-base-toolbar>
+                        <div class="btn-group" role="group">
+                            <terra-button inputIcon='icon-save'
+                                [inputTooltipText]="'Verleihen'"
+                                [inputTooltipPlacement]="'bottom'">
+                            </terra-button>
+                        </div>
+                    </terra-base-toolbar>
                 </div>
                 <div class="col-md-7">
                     <terra-portlet>
@@ -35,7 +53,7 @@
                         <terra-text-input inputName="Nachname" [(ngModel)]="lastName" (ngModelChange)="emailAutocomplete($event)"> </terra-text-input>
                         <terra-text-input inputName="E-Mail" [(ngModel)]="email"></terra-text-input>
                         <terra-date-picker
-                            inputName="Ausleihen bis:"
+                            inputName="Rückgabedatum"
                             [(ngModel)]="date">
                         </terra-date-picker>
                     </terra-portlet>
