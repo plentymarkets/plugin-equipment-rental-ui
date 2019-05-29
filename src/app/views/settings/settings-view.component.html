@@ -1,0 +1,81 @@
+<terra-alert-panel></terra-alert-panel>
+<terra-base-toolbar>
+    <div class="btn-group" role="group">
+        <terra-button [inputIcon]="'icon-save'"
+                      [inputTooltipText]="'Save'"
+                      [inputTooltipPlacement]="'bottom'"
+                      (outputClicked)="saveSettings()">
+        </terra-button>
+    </div>
+</terra-base-toolbar>
+
+<div *ngIf="isLoading; then loadingBlock else contentBlock"></div>
+<ng-template #loadingBlock>
+    <terra-portlet>
+        <div class="loadingComponent">
+            <terra-loading-spinner></terra-loading-spinner>
+            Loading...
+        </div>
+    </terra-portlet>
+</ng-template>
+
+<ng-template #contentBlock>
+    <terra-portlet
+            inputPortletHeader="Gerätekategorien">
+        <div class="row">
+            <div class="col-lg-8">
+                <terra-multi-check-box [(ngModel)]="categoryValues"
+                                       [inputIsDisabled]="false">
+                </terra-multi-check-box>
+            </div>
+            <div class="col-lg-4">
+                <h4>Aktive Kategorien</h4>
+                <terra-taglist [inputTagList]="activeCategorys"></terra-taglist>
+            </div>
+        </div>
+    </terra-portlet>
+
+    <terra-portlet
+            inputPortletHeader="E-Mail Template">
+        <div class="row">
+            <div class="col-lg-8">
+                <terra-portlet>
+                    <terra-text-input
+                            inputName="E-Mail Betreff"
+                            [(ngModel)]="emailTemplateTopic">
+                    </terra-text-input>
+                    <terra-note-editor [inputPlaceholder]="'E-Mail Template zur Erinnerung'"
+                                       [(ngModel)]="emailTemplate">
+                    </terra-note-editor>
+                </terra-portlet>
+            </div>
+            <div class="col-lg-4">
+                <terra-portlet inputPortletHeader="Variablen">
+                    <table class="table table-striped">
+                        <tr>
+                            <td>$deviceOwnerFullName</td>
+                            <td>Name der Person, welche das Gerät aktuell ausgeliehen hat</td>
+                        </tr>
+                        <tr>
+                            <td>$deviceOwnerFirstName</td>
+                            <td>Vorname der Person, welche das Gerät aktuell ausgeliehen hat</td>
+                        </tr>
+                        <tr>
+                            <td>$deviceOwnerLastName</td>
+                            <td>Nachname der Person, welche das Gerät aktuell ausgeliehen hat</td>
+                        </tr>
+                        <tr>
+                            <td>$deviceName</td>
+                            <td>Name des Gerätes</td>
+                        </tr>
+                        <tr>
+                            <td>$deviceRentedAt</td>
+                            <td>Zeitpunkt des Verleihs</td>
+                        </tr>
+                    </table>
+                </terra-portlet>
+            </div>
+        </div>
+    </terra-portlet>
+</ng-template>
+

@@ -18,7 +18,15 @@ import { RouterViewComponent } from './views/router/router-view.component';
 import { TerraNodeTreeConfig } from '@plentymarkets/terra-components';
 import { OverviewViewComponent } from './views/overview/overview-view.component';
 
-import { ExampleDataService } from './views/overview/overview-view.service'; // import the example service
+import { OverviewDataService } from './views/overview/overview-view.service'; // import the example service
+import { TooltipModule } from 'ngx-bootstrap';
+import {
+    appRoutingProviders,
+    routing
+} from './plugin-equipment-rental.routing';
+import { ManageViewComponent } from "./views/manage/manage-view.component";
+import {SettingsViewComponent} from "./views/settings/settings-view.component";
+
 
 @NgModule({
     imports:      [
@@ -27,23 +35,27 @@ import { ExampleDataService } from './views/overview/overview-view.service'; // 
         FormsModule,
         HttpClientModule,
         TranslationModule.forRoot(l10nConfig),
-        RouterModule.forRoot([]),
-        TerraComponentsModule.forRoot()
+        TerraComponentsModule.forRoot(),
+        TooltipModule.forRoot(),
+        routing
     ],
     declarations: [
         PluginEquipmentRentalComponent,
         RouterViewComponent,
-        OverviewViewComponent
+        OverviewViewComponent,
+        ManageViewComponent,
+        SettingsViewComponent
     ],
     providers:    [
         TerraNodeTreeConfig,
-        ExampleDataService,
+        OverviewDataService,
         {
             provide:    APP_INITIALIZER,
             useFactory: initL10n,
             deps:       [L10nLoader],
             multi:      true
-        },        
+        },
+        appRoutingProviders,
     ],
     bootstrap:    [
         PluginEquipmentRentalComponent

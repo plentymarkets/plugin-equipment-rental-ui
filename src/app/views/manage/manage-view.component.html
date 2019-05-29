@@ -1,0 +1,65 @@
+<terra-alert-panel></terra-alert-panel>
+<terra-overlay #manageOverlay
+               inputOverlayTitle="Gruppenfunktion"
+               [inputIsSmall]="true">
+    <ng-template [ngIf]="manageTable.selectedRowList.length > 0" [ngIfElse]="noSelectedRows">
+        <terra-portlet>
+            <terra-button inputCaption="Ausführen"
+                          inputIcon="icon-execute"
+                          (outputClicked)="executePopupFunction(manageTable.selectedRowList)">
+            </terra-button>
+        </terra-portlet>
+        <terra-portlet>
+            <table class="table table-striped table-group-option">
+                <tr>
+                    <td><terra-checkbox #sendMailOption></terra-checkbox></td>
+                    <td>E-Mail senden</td>
+                </tr>
+            </table>
+        </terra-portlet>
+    </ng-template>
+    <ng-template #noSelectedRows>
+        Es wurden keine Einträge ausgewählt
+    </ng-template>
+</terra-overlay>
+<terra-data-table
+        [inputService]="_manageService"
+        [inputHasCheckboxes]="true"
+        [inputHeaderList]="headerList"
+        [inputContextMenu]="contextMenu"
+        [useContentBody]="true"
+        #manageTable
+>
+    <terra-group-function [show]="true"
+                          [disableExecution]="false"
+                          (executeGroupFunction)="executeGroupFunction(manageTable.selectedRowList)">
+    </terra-group-function>
+    <tbody>
+    <tr [tcTableRow]="row" hasContextMenu [rowData]="row.data" *ngFor="let row of _manageService.rowList; let index = index">
+        <td>
+            {{ capitalize(row.data.user.firstname) }} {{ capitalize(row.data.user.lastname) }}
+        </td>
+        <td>{{ row.data.comment }}</td>
+        <td>{{ row.data.created_at }}</td>
+        <td [ngClass]="isNumber(row.data.rent_until) && row.data.rent_until < 0 ? 'red' : ''">
+            <ng-template [ngIf]="isNumber(row.data.rent_until)" [ngIfElse]="rentUntilString">
+                <ng-template [ngIf]="row.data.rent_until <= 0" [ngIfElse]="rentUntilTimeLeft">
+                    <ng-template [ngIf]="row.data.rent_until == 0">
+                       Abgabe ist heute
+                    </ng-template>
+                    <ng-template [ngIf]="row.data.rent_until < 0">
+                        {{ row.data.rent_until*-1 }} {{ formatSingularPlural(row.data.rent_until,"Tag","Tage") }} über dem Datum
+                    </ng-template>
+                </ng-template>
+                <ng-template #rentUntilTimeLeft>
+                    {{ row.data.rent_until }} {{ formatSingularPlural(row.data.rent_until,"Tag","Tage") }}
+                </ng-template>
+            </ng-template>
+            <ng-template #rentUntilString>
+                {{ row.data.rent_until }}
+            </ng-template>
+        </td>
+    </tr>
+    </tbody>
+
+</terra-data-table>

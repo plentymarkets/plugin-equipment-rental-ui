@@ -14,57 +14,172 @@
     </ul>
 </terra-base-toolbar>
 <terra-3-col [leftColumnWidth]="leftColumnWidth" [centerColumnWidth]="centerColumnWidth" [rightColumnWidth]="rightColumnWidth">
-    <terra-filter left (outputOnSearchBtnClicked)="onSearchBtnClicked()"
-        (outputOnResetBtnClicked)="onResetBtnClicked()"
-        (outputOnEnterSubmit)="onSubmit()">  
-        <terra-text-input inputName="Name" [(ngModel)]="_name">
-        </terra-text-input>
-    </terra-filter>
+    <div class="leftColumn" left>
+        <terra-filter (outputOnSearchBtnClicked)="onSearchBtnClicked()"
+            (outputOnResetBtnClicked)="onResetBtnClicked()"
+            (outputOnEnterSubmit)="onSubmit()">
+            <terra-text-input inputName="Name" [(ngModel)]="_name">
+            </terra-text-input>
+            <terra-select-box
+                    inputName="Verfügbarkeit"
+                    [inputListBoxValues]="_selectAvailable"
+                    [(ngModel)]="availableFilter">
+            </terra-select-box>
+            <terra-select-box
+                    inputName="Kategorie"
+                    [inputListBoxValues]="_selectCategory"
+                    [(ngModel)]="categoryFilter">
+            </terra-select-box>
+        </terra-filter>
+    </div>
     <terra-portlet center>
-        <terra-card *ngFor="let article of articles" inputImagePath="{{ article.image }}" (click)="onClickTerraCard(article.id)">
+        <div *ngIf="isLoading" class="loadingComponent">
+            <terra-loading-spinner></terra-loading-spinner>
+            Loading...
+        </div>
+        <terra-card *ngFor="let article of articles" inputImagePath="{{ article.image }}" (click)="onClickTerraCard(article.id)"  [tooltip]="article.available == 0 ? 'Dieses Gerät ist verliehen an '+article.user : ''" placement="bottom" [className]="article.available == 0 ? 'rent' : 'available'">
             <div terra-card-header>
                 <p>{{ article.name }}</p>
             </div>
-            <div terra-card-content>
-                <p>{{ article.description }}</p>
-            </div>
             <div terra-card-footer>
-                <p>card footer</p>
+                <p>&nbsp;</p>
             </div>
         </terra-card>
     </terra-portlet>
-    <div class="rightColumn" right>       
+    <div class="rightColumn" right>
         <div class="container-fluid">
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-lg-12">
                     <terra-base-toolbar>
                         <div class="btn-group" role="group">
-                            <terra-button inputIcon='icon-save'
+                            <terra-button *ngIf="!_actualArticleIsRent && !isLoading" inputIcon='icon-save'
                                 [inputTooltipText]="'Verleihen'"
-                                [inputTooltipPlacement]="'bottom'">
+                                [inputTooltipPlacement]="'bottom'"
+                                (click)="rentItem(_actualArticleKey)"
+                            >
                             </terra-button>
-                        </div>
-                    </terra-base-toolbar>
+                            <terra-button *ngIf="_actualArticleIsRent && !isLoading" inputIcon='icon-delete'
+                                          [inputTooltipText]="'Zurückgeben'"
+                                          [inputTooltipPlacement]="'bottom'"
+                                          (click)="giveBack(_actualArticleId)"
+                            >
+                            </terra-button>
                 </div>
-                <div class="col-md-7">
-                    <terra-portlet>
-                        <h1>Artikel verleihen</h1>
-                        <terra-text-input inputName="Vorname" [(ngModel)]="firstName" (ngModelChange)="emailAutocomplete($event)"></terra-text-input>
-                        <terra-text-input inputName="Nachname" [(ngModel)]="lastName" (ngModelChange)="emailAutocomplete($event)"> </terra-text-input>
-                        <terra-text-input inputName="E-Mail" [(ngModel)]="email"></terra-text-input>
-                        <terra-date-picker
-                            inputName="Rückgabedatum"
-                            [(ngModel)]="date">
-                        </terra-date-picker>
+                </terra-base-toolbar>
+            </div>
+            <div class="col-lg-9">
+                <terra-portlet *ngIf="isLoading" class="loadingComponent">
+                    <terra-loading-spinner></terra-loading-spinner>
+                    Loading...
+                </terra-portlet>
+                    <ng-container *ngIf="!_actualArticleIsRent && !isLoading">
+                        <terra-portlet>
+                            <h1>Artikel verleihen</h1>
+                            <terra-text-input inputName="Vorname*" [(ngModel)]="firstName" (ngModelChange)="emailAutocomplete($event)"></terra-text-input>
+                            <terra-text-input inputName="Nachname*" [(ngModel)]="lastName" (ngModelChange)="emailAutocomplete($event)"> </terra-text-input>
+                            <terra-text-input inputName="E-Mail*" [(ngModel)]="email"></terra-text-input>
+                            <terra-date-picker
+                                    inputName="Rückgabedatum"
+                                    [(ngModel)]="date">
+                            </terra-date-picker>
+                            <terra-text-input inputName="Bemerkung" [(ngModel)]="comment"></terra-text-input>
+                        </terra-portlet>
+                    </ng-container>
+                    <ng-container *ngIf="_actualArticleIsRent && !isLoading">
+                        <terra-portlet>
+                            <h2>Artikel zurückgeben</h2>
+                            <terra-text-input inputName="Bemerkung" [(ngModel)]="giveBackComment"></terra-text-input>
+                            <terra-select-box
+                                    inputName="Status"
+                                    [inputListBoxValues]="_selectStatus"
+                                    [(ngModel)]="statusOption">
+                            </terra-select-box>
+                        </terra-portlet>
+                        <terra-portlet>
+                            <div *ngIf="_actualArticleData.user">
+                                <h2>Der Artikel ist bereits verliehen</h2>
+                                <table class="table table-striped">
+                                    <tbody>
+                                        <tr>
+                                            <td>Verliehen an:</td>
+                                            <td>{{ _actualArticleData.user.firstname| titlecase }} {{ _actualArticleData.user.lastname| titlecase }}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Verliehen am:</td>
+                                            <td>{{ _actualArticleData.created_at*1000| date:'dd.MM.yyyy' }}</td>
+                                        </tr>
+                                        <tr *ngIf="_actualArticleData.rent_until > 0">
+                                            <td>Artikel verliehen bis:</td>
+                                            <td>{{ _actualArticleData.rent_until*1000| date:'dd.MM.yyyy' }}</td>
+                                        </tr>
+                                        <tr *ngIf="_actualArticleTimeDif > 0">
+                                            <td>Tage verbleibend:</td>
+                                            <td>{{ _actualArticleTimeDif }}</td>
+                                        </tr>
+                                        <tr *ngIf="_actualArticleTimeDif < 0">
+                                            <td>Tage überschritten:</td>
+                                            <td>{{ _actualArticleTimeDif*-1}}</td>
+                                        </tr>
+                                        <tr *ngIf="_actualArticleData.comment.length > 0">
+                                            <td>Vermerkung:</td>
+                                            <td>{{ _actualArticleData.comment }}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                            </div>
+                        </terra-portlet>
+                    </ng-container>
+                    <terra-portlet *ngIf="!isLoading && _actualArticleKey > 0 && history.length > 0 && history[_actualArticleId] && _historyService.rowList.length > 0">
+                        <h2>Verleih Historie</h2>
+                        <terra-data-table
+                                [inputService]="_historyService"
+                                [inputHasCheckboxes]="false"
+                                [inputHeaderList]="headerList"
+                                [inputContextMenu]="contextMenu"
+                                [useContentBody]="true"
+                                #table
+                        >
+                            <tbody>
+                            <tr [tcTableRow]="row" hasContextMenu [rowData]="row.data" *ngFor="let row of _historyService.rowList; let index = index">
+                                <td>{{ row.data.user }}</td>
+                                <td>{{ row.data.adminUser }}</td>
+                                <td>{{ row.data.comment }}</td>
+                                <td>{{ row.data.getBackComment }}</td>
+                                <td>{{ row.data.created_at }}</td>
+                                <td>{{ row.data.rent_until }}</td>
+                                <td>{{ row.data.status }}</td>
+                            </tr>
+                            </tbody>
+
+                        </terra-data-table>
                     </terra-portlet>
                 </div>
-                <div class="col-md-5">
+                <div class="col-lg-3">
                     <terra-portlet>
                         <div terra-card-content>
-                        <div *ngIf="articlesResult[_actualArticleKey]">
+                        <div *ngIf="articlesResult && articlesResult[_actualArticleKey]">
                             <h1>{{ articlesResult[_actualArticleKey].name }}</h1>
-                            <img src="{{ articlesResult[_actualArticleKey].image }}" class="img-fluid" alt="{{ articlesResult[_actualArticleKey].name }}">
+                            <div class="text-center">
+                                <img src="{{ articlesResult[_actualArticleKey].image }}" class="img" alt="{{ articlesResult[_actualArticleKey].name }}">
+                            </div>
                             <p innerHTML="{{ articlesResult[_actualArticleKey].longDescription }}"></p>
+                            <table class="table table-striped" *ngIf="articlesResult[_actualArticleKey]">
+                                <tbody>
+                                    <tr *ngFor="let attributeResult of articlesResult[_actualArticleKey].attributes">
+                                        <td>{{ attributeResult.attribute.backendName }}</td>
+                                        <td>{{ attributeResult.attributeValue.backendName }}</td>
+                                    </tr>
+                                    <ng-template [ngIf]="articlesResult[_actualArticleKey].properties.length > 0">
+                                        <tr *ngFor="let property of articlesResult[_actualArticleKey].properties; index as i">
+                                            <ng-template [ngIf]="propertyNames[property.propertyRelation.position]">
+                                                <td>{{ propertyNames[property.propertyRelation.position] }}</td>
+                                                <td>{{ property.relationValues[0].value }}</td>
+                                            </ng-template>
+                                        </tr>
+                                    </ng-template>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                     </terra-portlet>
