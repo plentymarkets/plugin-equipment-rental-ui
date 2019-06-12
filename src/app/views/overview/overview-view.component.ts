@@ -51,8 +51,12 @@ export class OverviewViewComponent implements OnInit
     public articlesRentInformation:Array<RentInterface> = [];
     public propertyNames:Array<string> = [];
     public history:Array<any> = [];
+    public findUserResult:Array<any> = [];
+    private autofillCall:any;
+    public autofillLoading:boolean = false;
 
     // Form
+    public searchName:string = '';
     public firstName:string = '';
     public lastName:string = '';
     public email:string = '';
@@ -293,6 +297,46 @@ export class OverviewViewComponent implements OnInit
             return;
         }
         this.email = this.firstName + '.' + this.lastName + '@plentymarkets.com';
+    }
+
+    public autofill():void
+    {
+        this.autofillLoading = false;
+        this.findUserResult = [];
+
+        if(!isNullOrUndefined(this.autofillCall))
+            this.autofillCall.unsubscribe();
+
+        if(this.searchName.length < 3)
+            return;
+
+        this.autofillLoading = true;
+        this.autofillCall = this._statsDataService.getRestCallData('plugin/equipmentRental/rentalDevice/findUser/' + this.searchName).subscribe((response:Array<any>) =>
+            {
+                for(let user of response)
+                {
+                    this.findUserResult.push(user);
+                }
+                this.autofillLoading = false;
+            }, error => {
+                this._alert.addAlert({
+                    msg:              'Error while loading users',
+                    type:             'danger',
+                    dismissOnTimeout: 7000,
+                    identifier:       'info'
+                });
+                this.autofillLoading = false;
+            }
+        );
+
+    }
+
+    public fillForms(user):void
+    {
+        this.findUserResult = [];
+        this.firstName = user.firstname;
+        this.lastName = user.lastname;
+        this.email = user.email;
     }
 
     private loadPage(page:number):void

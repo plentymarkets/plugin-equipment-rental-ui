@@ -75,6 +75,32 @@
                     <ng-container *ngIf="!_actualArticleIsRent && !isLoading">
                         <terra-portlet>
                             <h1>Artikel verleihen</h1>
+                            <terra-text-input inputName="Benutzer suchen" [(ngModel)]="searchName" (ngModelChange)="autofill($event)"></terra-text-input>
+                            <ng-template [ngIf]="autofillLoading">
+                                Loading...
+                            </ng-template>
+                            <ng-template [ngIf]="findUserResult && findUserResult.length > 0">
+                                <div class="popupWrapper">
+                                    <table class="table popupTable">
+                                        <thead>
+                                            <tr>
+                                                <th>Vorname</th>
+                                                <th>Nachname</th>
+                                                <th>E-Mail</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let user of findUserResult; let index = index" (click)="fillForms(user)">
+                                                <td>{{ user.firstname }}</td>
+                                                <td>{{ user.lastname }}</td>
+                                                <td>{{ user.email }}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </ng-template>
+                            <br>
+
                             <terra-text-input inputName="Vorname*" [(ngModel)]="firstName" (ngModelChange)="emailAutocomplete($event)"></terra-text-input>
                             <terra-text-input inputName="Nachname*" [(ngModel)]="lastName" (ngModelChange)="emailAutocomplete($event)"> </terra-text-input>
                             <terra-text-input inputName="E-Mail*" [(ngModel)]="email"></terra-text-input>
