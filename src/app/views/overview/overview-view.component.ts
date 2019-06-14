@@ -11,12 +11,14 @@ import {
     TerraTextAlignEnum
 }
     from '@plentymarkets/terra-components';
-
-import { TranslationService } from 'angular-l10n';
 import { HistoryDataTableService } from './table/history-table.service';
-import {SettingsInterface} from "../settings/settings-view.component";
+import { SettingsInterface } from '../settings/settings-view.component';
+import { HistoryDataTableInterface } from './table/history-data-table.interface';
 
-function isNullOrUndefined(object: any):boolean { return object === undefined || object === null};
+function isNullOrUndefined(object:any):boolean
+{
+    return object === undefined || object === null;
+}
 
 export interface RentInterface
 {
@@ -28,6 +30,13 @@ export interface RentInterface
     created_at?:number;
     user?:any;
     available?:number;
+}
+
+export interface UserInterface{
+    id?:number;
+    firstname?:string;
+    lastname?:string;
+    email?:string;
 }
 
 @Component({
@@ -44,15 +53,12 @@ export class OverviewViewComponent implements OnInit
     public settings:Map<string, any> = new Map<string, any>();
     public categoryNames:Map<number, string> = new Map<number, string>();
 
-    protected readonly headerList:Array<TerraDataTableHeaderCellInterface>;
-
     public articlesResult:Array<ArticleInterface>; // Array with all results
     public articles:Array<ArticleInterface>; // Copy of array to filter items
     public articlesRentInformation:Array<RentInterface> = [];
     public propertyNames:Array<string> = [];
     public history:Array<any> = [];
     public findUserResult:Array<any> = [];
-    private autofillCall:any;
     public autofillLoading:boolean = false;
 
     // Form
@@ -65,6 +71,15 @@ export class OverviewViewComponent implements OnInit
     public giveBackComment:string = '';
 
     public availableFilter:string = '';
+
+    public categoryFilter:string = '';
+
+    public statusOption:string = '';
+    public _actualArticleData:RentInterface;
+    public _actualArticleTimeDif:number = 0;
+
+    protected readonly headerList:Array<TerraDataTableHeaderCellInterface>;
+    private autofillCall:any;
     private _selectAvailable:Array<TerraSelectBoxValueInterface> = [
         {
             value: -1,
@@ -79,16 +94,12 @@ export class OverviewViewComponent implements OnInit
             caption: 'Verfügbar'
         }
     ];
-
-    public categoryFilter:string = '';
     private _selectCategory:Array<TerraSelectBoxValueInterface> = [
         {
             value: 0,
             caption: 'Alle'
         }
     ];
-
-    public statusOption:string = '';
     private _selectStatus:Array<TerraSelectBoxValueInterface> = [
         {
             value: 0,
@@ -117,27 +128,23 @@ export class OverviewViewComponent implements OnInit
     private _actualArticleIsRent:boolean;
     private _actualArticleId:number = 0;
     private _actualArticleKey:any = 0;
-    public _actualArticleData:RentInterface;
-    public _actualArticleTimeDif:number = 0;
     private _name:string = '';
 
     private _alert:TerraAlertComponent;
     constructor(
-                public translation:TranslationService,
                 private _statsDataService:OverviewDataService,
                 private _historyService:HistoryDataTableService,
     )
     {
         this._alert = TerraAlertComponent.getInstance();
         this.headerList = this.createHeaderList();
-/*        this.contextMenu = this.createContextMenu();*/
     }
 
     public ngOnInit():void
     {
         this.loadPage(1);
         this._alert.closeAlertByIdentifier('info');
-        this.loadCategorys()
+        this.loadCategorys();
         this.loadPropertyNames();
     }
 
@@ -147,26 +154,32 @@ export class OverviewViewComponent implements OnInit
         this._statsDataService.getRestCallData('rest/categories').subscribe((response:any) =>
             {
                 if(isNullOrUndefined(response.entries))
+                {
                     return;
+                }
 
                 for(let category of response.entries)
                 {
-                    this.categoryNames.set(category.id,category.details[0].name);
+                    this.categoryNames.set(category.id, category.details[0].name);
                 }
                 this.loadSettings();
-            }, error => {
-                console.log("error while loading categorys");
+            }, error =>
+            {
+                console.log('error while loading categorys');
             }
         );
     }
     private isJsonString(str:string):boolean
     {
-        try {
-            var json = JSON.parse(str);
+        try
+        {
+            let json:any = JSON.parse(str);
             return (typeof json === 'object' && json.length > 0);
-        } catch (e) {
+        }
+        catch (e)
+        {
             return false;
-        }    
+        }
     }
     private loadSettings():void
     {
@@ -175,13 +188,16 @@ export class OverviewViewComponent implements OnInit
                 for(let setting of response)
                 {
                     if(!isNullOrUndefined(setting) && !isNullOrUndefined(setting.name))
-                        this.settings.set(setting.name,setting.value);
+                    {
+                        this.settings.set(setting.name, setting.value);
+                    }
                 }
 
-                if(this.isJsonString(this.settings.get("categorys")))
+                if(this.isJsonString(this.settings.get('categorys')))
                 {
-                    let categorys = JSON.parse(this.settings.get("categorys"));
-                    for(let id of categorys) {
+                    let categorys:Array<number> = JSON.parse(this.settings.get('categorys'));
+                    for(let id of categorys)
+                    {
                         this._selectCategory.push(
                             {
                                 value:  id,
@@ -191,7 +207,8 @@ export class OverviewViewComponent implements OnInit
                     }
                     this.createArticleData();
                 }
-                else{
+                else
+                {
                     this._alert.addAlert({
                         msg:              'Es wurde keine Kategorie in den Einstellungen festgelegt',
                         type:             'danger',
@@ -200,8 +217,9 @@ export class OverviewViewComponent implements OnInit
                     });
                     this.isLoading = false;
                 }
-            }, error => {
-                console.log("error while loading settings");
+            }, error =>
+            {
+                console.log('error while loading settings');
             }
         );
     }
@@ -255,26 +273,29 @@ export class OverviewViewComponent implements OnInit
 
     private statusToText(id:number):string
     {
-        for(let status of this._selectStatus) {
+        for(let status of this._selectStatus)
+        {
             if (id > 0 && status.value == id)
+            {
                 return status.caption.toString();
+            }
         }
-        return "";
+        return '';
     }
 
     public loadPropertyNames():void
     {
-        let actualLang = "de";
+        let actualLang:string = 'de';
         this._statsDataService.getRestCallData('rest/properties').subscribe((response:any) =>
             {
                 if(Object.keys(response).length > 0)
                 {
                     for(let property of response['entries'])
                     {
-                        let propertyName = "NONAME";
+                        let propertyName:string = 'NONAME';
                         for(let name of property.names)
                         {
-                            if(name.lang == actualLang)
+                            if(name.lang === actualLang)
                             {
                                 propertyName = name.name;
                                 break;
@@ -304,13 +325,16 @@ export class OverviewViewComponent implements OnInit
         this.autofillLoading = false;
         this.findUserResult = [];
 
-        if(!isNullOrUndefined(this.autofillCall))
+        if(!isNullOrUndefined(this.autofillCall)) {
             this.autofillCall.unsubscribe();
+        }
 
-        if(this.searchName.length < 3)
+        if(this.searchName.length < 3) {
             return;
+        }
 
         this.autofillLoading = true;
+        // tslint:disable-next-line:max-line-length
         this.autofillCall = this._statsDataService.getRestCallData('plugin/equipmentRental/rentalDevice/findUser/' + this.searchName).subscribe((response:Array<any>) =>
             {
                 for(let user of response)
@@ -318,7 +342,8 @@ export class OverviewViewComponent implements OnInit
                     this.findUserResult.push(user);
                 }
                 this.autofillLoading = false;
-            }, error => {
+            }, error =>
+            {
                 this._alert.addAlert({
                     msg:              'Error while loading users',
                     type:             'danger',
@@ -330,8 +355,7 @@ export class OverviewViewComponent implements OnInit
         );
 
     }
-
-    public fillForms(user):void
+    public fillForms(user:UserInterface):void
     {
         this.findUserResult = [];
         this.firstName = user.firstname;
@@ -363,7 +387,8 @@ export class OverviewViewComponent implements OnInit
     }
 
     public getDiferenceInDays(time:number):number {
-        return Math.abs(time*1000 - new Date().getTime()) / (1000 * 60 * 60 * 24) | 0;
+        let dif:number = (time * 1000 - new Date().getTime()) / (1000 * 60 * 60 * 24);
+        return Math.ceil(dif);
     }
 
     private onClickTerraCard(id:number):void
@@ -376,14 +401,14 @@ export class OverviewViewComponent implements OnInit
 
     private actualTime():number
     {
-        return new Date().getTime()/1000;
+        return new Date().getTime() / 1000;
     }
 
     private setActualArticleData(id:number):void
     {
         this._actualArticleData = {};
         this._actualArticleTimeDif = 0;
-        let arrayKey;
+        let arrayKey:any;
         for (let i in this.articlesRentInformation) {
             if(this.articlesRentInformation[i].deviceId == id)
             {
@@ -391,7 +416,7 @@ export class OverviewViewComponent implements OnInit
                 break;
             }
         }
-        if(arrayKey != undefined)
+        if(!isNullOrUndefined(arrayKey))
         {
             this._actualArticleData = this.articlesRentInformation[arrayKey];
             this._actualArticleTimeDif = this._actualArticleData.rent_until > 0 ? this.getDiferenceInDays(this._actualArticleData.rent_until) : 0;
@@ -402,9 +427,9 @@ export class OverviewViewComponent implements OnInit
     private loadRentInformation(id:number):void
     {
         this.showHistory(id);
-        let arrayKey;
+        let arrayKey:any;
         for (let i in this.articlesRentInformation) {
-            if(this.articlesRentInformation[i].deviceId == id)
+            if(this.articlesRentInformation[i].deviceId === id)
             {
                 arrayKey = i;
                 break;
@@ -414,10 +439,11 @@ export class OverviewViewComponent implements OnInit
         {
             try{
                 this.isLoading = true;
-                this._statsDataService.getRestCallData('plugin/equipmentRental/rentalDevice/'+id).subscribe((response:any) =>
+                this._statsDataService.getRestCallData('plugin/equipmentRental/rentalDevice/' + id).subscribe((response:any) =>
                     {
                         if(Object.keys(response).length > 0)
                         {
+                            response.isAvailable = parseInt(response.isAvailable);
                             this.articlesRentInformation.push(
                                 {
                                     id: response.id,
@@ -429,14 +455,16 @@ export class OverviewViewComponent implements OnInit
                                     user: response.user,
                                     available: response.isAvailable
                                 });
-                            this._actualArticleIsRent = response.isAvailable == 0 ? true : false;
+                            this._actualArticleIsRent = response.isAvailable === 0;
                         }
-                        else {
+                        else
+                        {
                             this._actualArticleIsRent = false;
                         }
                         this.setActualArticleData(id);
                         this.isLoading = false;
-                    }, error => {
+                    }, error =>
+                    {
                         this._actualArticleIsRent = false;
                         this.isLoading = false;
                     }
@@ -449,15 +477,16 @@ export class OverviewViewComponent implements OnInit
             }
         }
         else{
-            this._actualArticleIsRent = this.articlesRentInformation[arrayKey].available == 0 ? true : false;
+            this._actualArticleIsRent = this.articlesRentInformation[arrayKey].available === 0;
         }
         this.setActualArticleData(id);
     }
 
     private setActualArticleKeyById(id:number):void
     {
-        for (let i in this.articlesResult) {
-            if(this.articlesResult[i].id == this._actualArticleId)
+        for (let i in this.articlesResult)
+        {
+            if(this.articlesResult[i].id === id)
             {
                 this._actualArticleKey = i;
                 break;
@@ -472,7 +501,7 @@ export class OverviewViewComponent implements OnInit
 
     public isValidEmail(email:string):boolean
     {
-        if(email.indexOf("@") > 0 && email.split("@")[1].indexOf(".") > 0 )
+        if(email.indexOf('@') > 0 && email.split('@')[1].indexOf('.') > 0 )
         {
             return true;
         }
@@ -481,11 +510,11 @@ export class OverviewViewComponent implements OnInit
 
     private giveBack(deviceId:number):void
     {
-        let data = {
+        let data:any = {
             comment : this.giveBackComment,
             status: parseInt(this.statusOption)
         };
-        this._statsDataService.putRestCallData('plugin/equipmentRental/rentalDevice/'+deviceId,data).subscribe((response:Array<any>) =>
+        this._statsDataService.putRestCallData('plugin/equipmentRental/rentalDevice/' + deviceId, data).subscribe((response:Array<any>) =>
             {
                 this._alert.addAlert({
                     msg:              'Das Gerät wurde erfolgreich zurückgegeben',
@@ -503,14 +532,16 @@ export class OverviewViewComponent implements OnInit
                 }
                 this.refreshHistory(deviceId);
                 this.articlesResult[this._actualArticleKey].available = 1;
-                this.articlesResult[this._actualArticleKey].user = "";
-                this.email = "";
-                this.date = "";
-                this.lastName = "";
-                this.firstName = "";
-                this.comment = "";
+                this.articlesResult[this._actualArticleKey].user = '';
+                this.email = '';
+                this.date = '';
+                this.lastName = '';
+                this.firstName = '';
+                this.comment = '';
+                this.searchName = '';
 
-            }, error => {
+            }, error =>
+            {
                 this._alert.addAlert({
                     msg:              'Error while giving back device',
                     type:             'danger',
@@ -535,13 +566,13 @@ export class OverviewViewComponent implements OnInit
                 });
             return;
         }
-        let data = {
+        let data:any = {
             firstname: this.firstName,
             lastname: this.lastName,
             email: this.email,
             deviceId: this.articlesResult[index].id,
             userId: 2,
-            rent_until: this.date != null ? new Date(this.date).getTime()/1000 : 0,
+            rent_until: this.date != null ? new Date(this.date).getTime() / 1000 : 0,
             comment: this.comment
         };
 
@@ -556,7 +587,7 @@ export class OverviewViewComponent implements OnInit
                 });
             return;
         }
-        this._statsDataService.postRestCallData('plugin/equipmentRental/rentalDevice',data).subscribe((response:Array<any>) =>
+        this._statsDataService.postRestCallData('plugin/equipmentRental/rentalDevice', data).subscribe((response:Array<any>) =>
             {
                 this._alert.addAlert({
                     msg:              'Das Gerät wurde erfolgreich verliehen',
@@ -572,11 +603,12 @@ export class OverviewViewComponent implements OnInit
                     }
                 }
                 this.articlesResult[index].available = 0;
-                this.articlesResult[index].user = this.capitalize(this.firstName) + " " + this.capitalize(this.lastName);
+                this.articlesResult[index].user = this.capitalize(this.firstName) + ' ' + this.capitalize(this.lastName);
                 this.loadRentInformation(data.deviceId);
                 this.refreshHistory(index);
                 this._actualArticleIsRent = true;
-            }, error => {
+            }, error =>
+            {
                 this._alert.addAlert({
                     msg:              'Error while renting device',
                     type:             'danger',
@@ -593,7 +625,7 @@ export class OverviewViewComponent implements OnInit
     {
         this.articles = this.articlesResult;
 
-        //Name filter
+        // Name filter
         if(this._name.length > 0)
         {
             this.articles = this.articlesResult.filter(
@@ -601,16 +633,16 @@ export class OverviewViewComponent implements OnInit
             );
         }
 
-        //Available filter
-        if(this.availableFilter != "-1")
+        // Available filter
+        if(this.availableFilter != '-1')
         {
             this.articles = this.articles.filter(
                 article => article.available == parseInt(this.availableFilter)
             );
         }
 
-        //Category filter
-        if(this.categoryFilter != "0")
+        // Category filter
+        if(this.categoryFilter != '0')
         {
             this.articles = this.articles.filter(
                 article => article.category == parseInt(this.categoryFilter)
@@ -620,38 +652,39 @@ export class OverviewViewComponent implements OnInit
 
     private createArticleData():void
     {
-        let categorys = JSON.parse(this.settings.get("categorys"));
+        let categorys:Array<number> = JSON.parse(this.settings.get('categorys'));
         this.articlesResult = [];
         for(let category of categorys)
         {
             // tslint:disable-next-line:max-line-length
             this.isLoading = true;
             this._statsDataService.getRestCallData('plugin/equipmentRental/rentalDevice?categoryId=' + category).subscribe((response:Array<any>) =>
-            {
-                for(let article of response)
                 {
-                    this.articlesResult.push(
-                        {
-                            id: article.id,
-                            name: (article.name !== null) ? article.name : 'NONAME',
-                            image: article.image,
-                            category: parseInt(category),
-                            attributes: article.variationAttributeValues,
-                            properties: article.properties,
-                            available: article.isAvailable,
-                            user: article.user
-                        });
-                }
-                this.isLoading = false;
-            }, error => {
-                this._alert.addAlert({
-                    msg:              'Error while loading items',
-                    type:             'danger',
-                    dismissOnTimeout: 7000,
-                    identifier:       'info'
-                });
+                    for(let article of response)
+                    {
+                        this.articlesResult.push(
+                            {
+                                id: article.id,
+                                name: (article.name !== null) ? article.name : 'NONAME',
+                                image: article.image,
+                                category: category,
+                                attributes: article.variationAttributeValues,
+                                properties: article.properties,
+                                available: article.isAvailable,
+                                user: article.user
+                            });
+                    }
                     this.isLoading = false;
-            }
+                }, error =>
+                {
+                    this._alert.addAlert({
+                        msg:              'Error while loading items',
+                        type:             'danger',
+                        dismissOnTimeout: 7000,
+                        identifier:       'info'
+                    });
+                    this.isLoading = false;
+                }
             );
         }
         this.articles = this.articlesResult;
@@ -660,8 +693,9 @@ export class OverviewViewComponent implements OnInit
 
     private refreshHistory(id:number):void
     {
-        if(!isNullOrUndefined(history[id]))
+        if(!isNullOrUndefined(history[id])) {
             this.history[id] = undefined;
+        }
 
         this._historyService.clearEntrys();
         this.showHistory(id);
@@ -670,7 +704,7 @@ export class OverviewViewComponent implements OnInit
     public showHistory(id:number):void
     {
         this.isLoading = true;
-        let dateOptions = { year: 'numeric', month: 'numeric', day: 'numeric' };
+        let dateOptions:Object = { year: 'numeric', month: 'numeric', day: 'numeric' };
 
         if(!isNullOrUndefined(history[id]))
             this.history[id] = undefined;
@@ -682,14 +716,16 @@ export class OverviewViewComponent implements OnInit
                 this.history[id] = [];
                 for(let deviceHistory of response)
                 {
-                    let historyItem = {
+                    let historyItem:HistoryDataTableInterface = {
                         user: deviceHistory.user,
-                        adminUser: deviceHistory.adminUser.id == 0 ? "NONAME": this.capitalize(deviceHistory.adminUser.firstname)+" "+this.capitalize(deviceHistory.adminUser.lastname),
+                        // tslint:disable-next-line:max-line-length
+                        adminUser: deviceHistory.adminUser.id === 0 ? 'NONAME' : this.capitalize(deviceHistory.adminUser.firstname) + ' ' + this.capitalize(deviceHistory.adminUser.lastname),
                         comment: deviceHistory.comment,
                         getBackComment: deviceHistory.getBackComment,
                         isAvailable: deviceHistory.isAvailable,
-                        rent_until: deviceHistory.rent_until > 0 ?  new Date(deviceHistory.rent_until*1000).toLocaleDateString('de-DE', dateOptions) : "Unbestimmte Zeit",
-                        created_at: new Date(deviceHistory.created_at*1000).toLocaleDateString('de-DE', dateOptions),
+                        // tslint:disable-next-line:max-line-length
+                        rent_until: deviceHistory.rent_until > 0 ?  new Date(deviceHistory.rent_until * 1000).toLocaleDateString('de-DE', dateOptions) : 'Unbestimmte Zeit',
+                        created_at: new Date(deviceHistory.created_at * 1000).toLocaleDateString('de-DE', dateOptions),
                         status: this.statusToText(deviceHistory.status),
                     };
                     this.history[id].push(historyItem);
@@ -709,8 +745,8 @@ export class OverviewViewComponent implements OnInit
         );
 
     }
-    public capitalize(string:string):string
+    public capitalize(str:string):string
     {
-        return string.charAt(0).toUpperCase() + string.slice(1);
+        return str.charAt(0).toUpperCase() + str.slice(1);
     }
 }

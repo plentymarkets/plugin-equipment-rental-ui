@@ -2,21 +2,17 @@ import {
     Component,
     ViewChild
 } from '@angular/core';
-import { ManageDataTableService } from "../overview/table/manage-table.service";
+import { ManageDataTableService } from '../overview/table/manage-table.service';
 import {
-    TerraDataTableContextMenuEntryInterface,
     TerraDataTableHeaderCellInterface,
-    TerraSelectBoxValueInterface,
     TerraTextAlignEnum,
     TerraDataTableRowInterface,
     TerraOverlayComponent,
     TerraCheckboxComponent,
     TerraAlertComponent
-} from "@plentymarkets/terra-components";
-import {HistoryDataTableInterface} from "../overview/table/history-data-table.interface";
-import {OverviewDataService} from "../overview/overview-view.service";
-
-function isNullOrUndefined(object: any):boolean { return object === undefined || object === null};
+} from '@plentymarkets/terra-components';
+import { HistoryDataTableInterface } from '../overview/table/history-data-table.interface';
+import { OverviewDataService } from '../overview/overview-view.service';
 
 @Component({
     selector: 'manage-view',
@@ -26,7 +22,6 @@ function isNullOrUndefined(object: any):boolean { return object === undefined ||
 export class ManageViewComponent
 {
     public isLoading:boolean;
-    //public selectedRows:Array<TerraDataTableRowInterface<HistoryDataTableInterface>>;
 
     @ViewChild('manageOverlay')
     public manageOverlay:TerraOverlayComponent;
@@ -85,7 +80,7 @@ export class ManageViewComponent
     public loadHistoryData():void
     {
         this.isLoading = true;
-        let dateOptions = { year: 'numeric', month: 'numeric', day: 'numeric' };
+        let dateOptions:any = { year: 'numeric', month: 'numeric', day: 'numeric' };
 
         this._manageService.clearEntrys();
 
@@ -93,17 +88,17 @@ export class ManageViewComponent
             {
                 for(let deviceHistory of response)
                 {
-                    let diffTime = deviceHistory.rent_until*1000 - new Date().getTime();
-                    let diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                    let diffTime:number = deviceHistory.rent_until * 1000 - new Date().getTime();
+                    let diffDays:number = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-                    let historyItem = {
+                    let historyItem:HistoryDataTableInterface = {
                         user: deviceHistory.user,
                         adminUser: deviceHistory.adminUser,
                         comment: deviceHistory.comment,
                         getBackComment: deviceHistory.getBackComment,
                         isAvailable: deviceHistory.isAvailable,
-                        rent_until: deviceHistory.rent_until > 0 ?  diffDays : "Unbestimmte Zeit",
-                        created_at: new Date(deviceHistory.created_at*1000).toLocaleDateString('de-DE', dateOptions),
+                        rent_until: deviceHistory.rent_until > 0 ?  diffDays : 'Unbestimmte Zeit',
+                        created_at: new Date(deviceHistory.created_at * 1000).toLocaleDateString('de-DE', dateOptions),
                         status: deviceHistory.status,
                         deviceId: deviceHistory.deviceId
                     };
@@ -112,8 +107,9 @@ export class ManageViewComponent
                 }
                 this._manageService.getResults();
                 this.isLoading = false;
-            }, error => {
-                console.log("error while loading history data");
+            }, error =>
+            {
+                console.log('error while loading history data');
             }
         );
 
@@ -153,7 +149,8 @@ export class ManageViewComponent
                         dismissOnTimeout: 5000,
                         identifier:       'info'
                     });
-                }, error => {
+                }, error =>
+                {
                     this.manageAlert.addAlert({
                         msg:              'Fehler beim Senden der E-Mail an '+row.data.user.email,
                         type:             'danger',
@@ -170,14 +167,14 @@ export class ManageViewComponent
         return typeof object === 'number';
     }
 
-    public formatSingularPlural(number:number,singular:string,plural:string):string
+    public formatSingularPlural(count:number, singular:string, plural:string):string
     {
-        return number == 1 || number == -1 ? singular : plural;
+        return count === 1 || count === -1 ? singular : plural;
     }
 
-    public capitalize(string:string):string
+    public capitalize(str:string):string
     {
-        return string.charAt(0).toUpperCase() + string.slice(1);
+        return str.charAt(0).toUpperCase() + str.slice(1);
     }
 
 }
