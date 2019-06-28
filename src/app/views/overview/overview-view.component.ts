@@ -73,6 +73,7 @@ export class OverviewViewComponent implements OnInit
     public availableFilter:string = '';
 
     public categoryFilter:string = '';
+    public userFilter:string = '';
 
     public statusOption:string = '';
     public _actualArticleData:RentInterface;
@@ -95,6 +96,12 @@ export class OverviewViewComponent implements OnInit
         }
     ];
     private _selectCategory:Array<TerraSelectBoxValueInterface> = [
+        {
+            value: 0,
+            caption: 'Alle'
+        }
+    ];
+    private _selectUser:Array<TerraSelectBoxValueInterface> = [
         {
             value: 0,
             caption: 'Alle'
@@ -609,6 +616,14 @@ export class OverviewViewComponent implements OnInit
                 article => article.category == parseInt(this.categoryFilter)
             );
         }
+
+        //User filter
+        if(this.userFilter != '0')
+        {
+            this.articles = this.articles.filter(
+                article => article.user == this.userFilter
+            );
+        }
     }
 
     private createArticleData():void
@@ -634,6 +649,24 @@ export class OverviewViewComponent implements OnInit
                                 available: article.isAvailable,
                                 user: article.user
                             });
+
+                        if(article.isAvailable == 0){
+                            let found:boolean = false;
+                            for(let user of this._selectUser){
+                                if(user.caption == article.user){
+                                    found = true;
+                                    break;
+                                }
+                            }
+                            if(!found){
+                                this._selectUser.push(
+                                    {
+                                        value:  article.user,
+                                        caption: article.user
+                                    }
+                                );
+                            }
+                        }
                     }
                     this.isLoading = false;
                 }, error =>
