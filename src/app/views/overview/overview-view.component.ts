@@ -5,12 +5,12 @@ import {
 import { ArticleInterface } from '../../core/article.interface';
 import { OverviewDataService } from './overview-view.service';
 import {
-    TerraAlertComponent,
     TerraSelectBoxValueInterface,
     TerraDataTableHeaderCellInterface,
-    TerraTextAlignEnum
+    TerraTextAlignEnum,
+    AlertService
 }
-    from '@plentymarkets/terra-components';
+from '@plentymarkets/terra-components';
 import { HistoryDataTableService } from './table/history-table.service';
 import { SettingsInterface } from '../settings/settings-view.component';
 import { HistoryDataTableInterface } from './table/history-data-table.interface';
@@ -130,20 +130,18 @@ export class OverviewViewComponent implements OnInit
     private _actualArticleKey:any = 0;
     private _name:string = '';
 
-    private _alert:TerraAlertComponent;
     constructor(
                 private _statsDataService:OverviewDataService,
                 private _historyService:HistoryDataTableService,
+                private _alert:AlertService
     )
     {
-        this._alert = TerraAlertComponent.getInstance();
         this.headerList = this.createHeaderList();
     }
 
     public ngOnInit():void
     {
         this.loadPage(1);
-        this._alert.closeAlertByIdentifier('info');
         this.loadCategorys();
         this.loadPropertyNames();
     }
@@ -209,12 +207,7 @@ export class OverviewViewComponent implements OnInit
                 }
                 else
                 {
-                    this._alert.addAlert({
-                        msg:              'Es wurde keine Kategorie in den Einstellungen festgelegt',
-                        type:             'danger',
-                        dismissOnTimeout: 3000,
-                        identifier:       'info'
-                    });
+                    this._alert.error('Es wurde keine Kategorie in den Einstellungen festgelegt');
                     this.isLoading = false;
                 }
             }, error =>
@@ -344,12 +337,7 @@ export class OverviewViewComponent implements OnInit
                 this.autofillLoading = false;
             }, error =>
             {
-                this._alert.addAlert({
-                    msg:              'Error while loading users',
-                    type:             'danger',
-                    dismissOnTimeout: 7000,
-                    identifier:       'info'
-                });
+                this._alert.error('Fehler beim Laden der Benutzer');
                 this.autofillLoading = false;
             }
         );
@@ -516,12 +504,7 @@ export class OverviewViewComponent implements OnInit
         };
         this._statsDataService.putRestCallData('plugin/equipmentRental/rentalDevice/' + deviceId, data).subscribe((response:Array<any>) =>
             {
-                this._alert.addAlert({
-                    msg:              'Das Gerät wurde erfolgreich zurückgegeben',
-                    type:             'success',
-                    dismissOnTimeout: 3000,
-                    identifier:       'info'
-                });
+                this._alert.success('Das Gerät wurde erfolgreich zurückgegeben');
                 this._actualArticleIsRent = false;
                 for (let i in this.articlesRentInformation) {
                     if(this.articlesRentInformation[i].deviceId == deviceId)
@@ -542,12 +525,7 @@ export class OverviewViewComponent implements OnInit
 
             }, error =>
             {
-                this._alert.addAlert({
-                    msg:              'Error while giving back device',
-                    type:             'danger',
-                    dismissOnTimeout: 7000,
-                    identifier:       'info'
-                });
+                this._alert.error('Fehler beim Zurückgeben des Gerätes');
             }
         );
     }
@@ -557,13 +535,7 @@ export class OverviewViewComponent implements OnInit
 
         if(this.firstName.length < 3 || this.lastName.length < 3 || !this.isValidEmail(this.email))
         {
-            this._alert.addAlert(
-                {
-                    msg:'Es müssen alle Felder ausgefüllt werden',
-                    type:'danger',
-                    dismissOnTimeout:3000,
-                    identifier: 'info'
-                });
+            this._alert.error('Es müssen alle Felder ausgefüllt werden');
             return;
         }
         let data:any = {
@@ -578,23 +550,12 @@ export class OverviewViewComponent implements OnInit
 
         if(data.rent_until > 0 && data.rent_until < this.actualTime())
         {
-            this._alert.addAlert(
-                {
-                    msg:'Das Rückgabedatum liegt in der Vergangenheit',
-                    type:'danger',
-                    dismissOnTimeout:3000,
-                    identifier: 'info'
-                });
+            this._alert.error('Das Rückgabedatum liegt in der Vergangenheit');
             return;
         }
         this._statsDataService.postRestCallData('plugin/equipmentRental/rentalDevice', data).subscribe((response:Array<any>) =>
             {
-                this._alert.addAlert({
-                    msg:              'Das Gerät wurde erfolgreich verliehen',
-                    type:             'success',
-                    dismissOnTimeout: 3000,
-                    identifier:       'info'
-                });
+                this._alert.success('Das Gerät wurde erfolgreich verliehen');
                 for (let i in this.articlesRentInformation) {
                     if(this.articlesRentInformation[i].deviceId == data.deviceId)
                     {
@@ -609,12 +570,7 @@ export class OverviewViewComponent implements OnInit
                 this._actualArticleIsRent = true;
             }, error =>
             {
-                this._alert.addAlert({
-                    msg:              'Error while renting device',
-                    type:             'danger',
-                    dismissOnTimeout: 7000,
-                    identifier:       'info'
-                });
+                this._alert.error('Fehler beim Ausleihen des Gerätes');
             }
         );
 
@@ -677,12 +633,7 @@ export class OverviewViewComponent implements OnInit
                     this.isLoading = false;
                 }, error =>
                 {
-                    this._alert.addAlert({
-                        msg:              'Error while loading items',
-                        type:             'danger',
-                        dismissOnTimeout: 7000,
-                        identifier:       'info'
-                    });
+                    this._alert.error('Fehler beim Laden der Artikel');
                     this.isLoading = false;
                 }
             );
@@ -735,12 +686,7 @@ export class OverviewViewComponent implements OnInit
                 this._historyService.getResults();
                 this.isLoading = false;
             }, error => {
-                this._alert.addAlert({
-                    msg:              'Error while loading items',
-                    type:             'danger',
-                    dismissOnTimeout: 7000,
-                    identifier:       'info'
-                });
+                this._alert.error("Fehler beim Laden der Historie");
             }
         );
 

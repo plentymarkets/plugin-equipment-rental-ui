@@ -9,7 +9,7 @@ import {
     TerraDataTableRowInterface,
     TerraOverlayComponent,
     TerraCheckboxComponent,
-    TerraAlertComponent
+    AlertService
 } from '@plentymarkets/terra-components';
 import { HistoryDataTableInterface } from '../overview/table/history-data-table.interface';
 import { OverviewDataService } from '../overview/overview-view.service';
@@ -31,11 +31,10 @@ export class ManageViewComponent
 
     protected readonly headerList:Array<TerraDataTableHeaderCellInterface>;
 
-    private manageAlert:TerraAlertComponent = TerraAlertComponent.getInstance();
-
     constructor(
         private _statsDataService:OverviewDataService,
         private _manageService:ManageDataTableService,
+        private _alert:AlertService
     )
     {
         this.headerList = this.createHeaderList();
@@ -43,7 +42,6 @@ export class ManageViewComponent
 
     public ngOnInit():void
     {
-        this.manageAlert.closeAlertByIdentifier('info');
         this.loadHistoryData();
     }
 
@@ -124,12 +122,7 @@ export class ManageViewComponent
     {
         if(!this.sendMailOption.value)
         {
-            this.manageAlert.addAlert({
-                msg:              'Es wurde keine Aktion ausgewählt',
-                type:             'danger',
-                dismissOnTimeout: 5000,
-                identifier:       'info'
-            });
+            this._alert.error('Es wurde keine Aktion ausgewählt');
             return;
         }
         this.manageOverlay.hideOverlay();
@@ -143,20 +136,10 @@ export class ManageViewComponent
             this._statsDataService.putRestCallData('plugin/equipmentRental/rentalDevice/remindEmail',data).subscribe((response:Array<any>) =>
                 {
                     this.sendMailOption.writeValue(false)
-                    this.manageAlert.addAlert({
-                        msg:              'Die Aktion wurde erfolgreich ausgeführt',
-                        type:             'success',
-                        dismissOnTimeout: 5000,
-                        identifier:       'info'
-                    });
+                    this._alert.success('Die Aktion wurde erfolgreich ausgeführt');
                 }, error =>
                 {
-                    this.manageAlert.addAlert({
-                        msg:              'Fehler beim Senden der E-Mail an '+row.data.user.email,
-                        type:             'danger',
-                        dismissOnTimeout: 7000,
-                        identifier:       'info'
-                    });
+                    this._alert.error('Fehler beim Senden der E-Mail an '+row.data.user.email);
                 }
             );
         }

@@ -3,7 +3,7 @@ import {OverviewDataService} from "../overview/overview-view.service";
 
 import {
     TerraMultiCheckBoxValueInterface,
-    TerraAlertComponent,
+    AlertService,
     TerraTagInterface
 }
 from '@plentymarkets/terra-components';
@@ -35,17 +35,15 @@ export class SettingsViewComponent
     public saveSettingSuccess:number = 0;
     public saveSettingError:number = 0;
 
-    private _alert:TerraAlertComponent;
     constructor(
         private _statsDataService:OverviewDataService,
+        private _alert:AlertService
     )
     {
-        this._alert = TerraAlertComponent.getInstance();
     }
 
     public ngOnInit():void
     {
-        this._alert.closeAlertByIdentifier('info');
         this.getSettings();
     }
 
@@ -172,24 +170,14 @@ export class SettingsViewComponent
             {
                 if(this.saveSettingSuccess == 0)
                 {
-                    this._alert.addAlert({
-                        msg:              'Einstellungen wurden gespeichert',
-                        type:             'success',
-                        dismissOnTimeout: 3000,
-                        identifier:       'info'
-                    });
+                    this._alert.success('Einstellungen wurden gespeichert');
                 }
                 this.saveSettingSuccess++;
             }, error => {
                 this.saveSettingError++;
                 if(this.saveSettingError == 1)
                 {
-                    this._alert.addAlert({
-                        msg:              'Fehler beim Speichern der Einstellungen',
-                        type:             'danger',
-                        dismissOnTimeout: 3000,
-                        identifier:       'info'
-                    });
+                    this._alert.error('Fehler beim Speichern der Einstellungen');
                 }
             }
         );
