@@ -5,8 +5,8 @@ import {
 } from '@angular/router';
 import { RouterViewComponent } from './views/router/router-view.component';
 import {OverviewViewComponent} from "./views/overview/overview-view.component";
-import {ManageViewComponent} from "./views/manage/manage-view.component";
-import {SettingsViewComponent} from "./views/settings/settings-view.component";
+import { ManageViewComponent } from "./views/manage/manage-view.component";
+import { SettingsViewComponent } from "./views/settings/settings-view.component";
 
 const appRoutes:Routes = [
     {
@@ -37,14 +37,14 @@ const appRoutes:Routes = [
                 path: 'overview',
                 component: OverviewViewComponent,
                 data: {
-                    label: 'Übersicht'
+                    label: 'Geräteübersicht'
                 }
             },
             {
                 path: 'manage',
                 component: ManageViewComponent,
                 data: {
-                    label: 'Verwalten'
+                    label: 'Verleihübersicht'
                 }
             }
         ]
