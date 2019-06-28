@@ -163,10 +163,40 @@ export class OverviewViewComponent implements OnInit
                 this.loadSettings();
             }, error =>
             {
-                console.log('error while loading categorys');
+                this.isLoading = false;
+                this._alert.error('Fehler beim Laden der Kategorien');
             }
         );
     }
+
+    public loadPropertyNames():void
+    {
+        let actualLang:string = 'de';
+        this._statsDataService.getRestCallData('rest/properties').subscribe((response:any) =>
+            {
+                if(Object.keys(response).length > 0)
+                {
+                    for(let property of response['entries'])
+                    {
+                        let propertyName:string = 'NONAME';
+                        for(let name of property.names)
+                        {
+                            if(name.lang === actualLang)
+                            {
+                                propertyName = name.name;
+                                break;
+                            }
+                        }
+                        this.propertyNames[property.position] = propertyName;
+                    }
+                }
+            }, error =>
+            {
+                this._alert.error('Fehler beim Laden der Eigenschaften');
+            }
+        );
+    }
+
     private isJsonString(str:string):boolean
     {
         try
@@ -212,7 +242,7 @@ export class OverviewViewComponent implements OnInit
                 }
             }, error =>
             {
-                console.log('error while loading settings');
+                this._alert.error('Fehler beim Laden der Einstellungen');
             }
         );
     }
@@ -274,31 +304,6 @@ export class OverviewViewComponent implements OnInit
             }
         }
         return '';
-    }
-
-    public loadPropertyNames():void
-    {
-        let actualLang:string = 'de';
-        this._statsDataService.getRestCallData('rest/properties').subscribe((response:any) =>
-            {
-                if(Object.keys(response).length > 0)
-                {
-                    for(let property of response['entries'])
-                    {
-                        let propertyName:string = 'NONAME';
-                        for(let name of property.names)
-                        {
-                            if(name.lang === actualLang)
-                            {
-                                propertyName = name.name;
-                                break;
-                            }
-                        }
-                        this.propertyNames[property.position] = propertyName;
-                    }
-                }
-            }
-        );
     }
 
     public emailAutocomplete(val:string):void {

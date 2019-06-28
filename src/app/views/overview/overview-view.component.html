@@ -58,7 +58,7 @@
                                 (click)="rentItem(_actualArticleKey)"
                             >
                             </terra-button>
-                            <terra-button *ngIf="_actualArticleIsRent && !isLoading" inputIcon='icon-delete'
+                            <terra-button *ngIf="_actualArticleIsRent && !isLoading" inputIcon='icon-save'
                                           [inputTooltipText]="'Zurückgeben'"
                                           [inputTooltipPlacement]="'bottom'"
                                           (click)="giveBack(_actualArticleId)"
@@ -87,6 +87,7 @@
                                                 <th>Vorname</th>
                                                 <th>Nachname</th>
                                                 <th>E-Mail</th>
+                                                <th>Typ</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -94,6 +95,7 @@
                                                 <td>{{ user.firstname }}</td>
                                                 <td>{{ user.lastname }}</td>
                                                 <td>{{ user.email }}</td>
+                                                <td>Benutzer</td>
                                             </tr>
                                         </tbody>
                                     </table>

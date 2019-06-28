@@ -1,17 +1,18 @@
 import {Injectable} from '@angular/core';
-import {Http} from '@angular/http';
+import { HttpClient,HttpHeaders,HttpErrorResponse } from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {TerraBaseService, TerraLoadingSpinnerService} from '@plentymarkets/terra-components';
-
+import {AlertService} from "@plentymarkets/terra-components";
 
 @Injectable()
-export class OverviewDataService extends TerraBaseService
+export class OverviewDataService
 {
+    public url:string = '/'; //base url
+    public headers:HttpHeaders = new HttpHeaders();
+
     public bearer:string;
-    constructor(private _loadingSpinnerService:TerraLoadingSpinnerService,
-                private _http:Http)
+    constructor(private http:HttpClient,
+                private _alert:AlertService)
     {
-        super(_loadingSpinnerService, _http, '/');
         if(process.env.ENV !== 'production')
         {
             // tslint:disable-next-line:max-line-length
@@ -22,47 +23,53 @@ export class OverviewDataService extends TerraBaseService
         this.setAuthorization();
     }
 
-    public getRestCallData(restRoute:string):Observable <Array<any>>
+    protected setAuthorization():void
     {
-        let url:string;
-        url = this.url + restRoute;
-        return this.mapRequest(
-            this.http.get(url, {
-                headers: this.headers,
-                body:    ''
-            })
-        );
+        if(localStorage.getItem('accessToken'))
+        {
+            this.setToHeader('Authorization', 'Bearer ' + localStorage.getItem('accessToken'));
+        }
     }
 
-    public postRestCallData(restRoute:string, data:any):Observable <Array<any>>
+    protected setToHeader(key:string, value:string):void
     {
-        let url:string;
-        url = this.url + restRoute;
-        return this.mapRequest(
-            this.http.post(url, data)
-        );
+        this.headers = this.headers.set(key, value);
     }
 
-    public deleteRestCallData(restRoute:string):Observable <Array<any>>
+    protected deleteFromHeader(key:string):void
     {
-        let url:string;
-        url = this.url + restRoute;
-        return this.mapRequest(
-            this.http.delete(url,{
-                headers: this.headers
-            })
-        );
+        this.headers = this.headers.delete(key);
     }
 
-    public putRestCallData(restRoute:string, data:any):Observable <Array<any>>
+    public getRestCallData(restRoute:string)
     {
         let url:string;
         url = this.url + restRoute;
-        return this.mapRequest(
-            this.http.put(url,data,{
-                headers: this.headers
-            })
-        );
+        return this.http.get(url, {headers: this.headers,});
+    }
+
+    private handleException(test:any):void
+    {
+        console.log(test)
+    }
+
+
+    public postRestCallData(restRoute:string, data:any):Observable <Object>
+    {
+        let url:string = this.url + restRoute;
+        return this.http.post(url, data);
+    }
+
+    public deleteRestCallData(restRoute:string):Observable <Object>
+    {
+        let url:string = this.url + restRoute;
+        return this.http.delete(url,{headers: this.headers});
+    }
+
+    public putRestCallData(restRoute:string, data:any):Observable <Object>
+    {
+        let url:string = this.url + restRoute;
+        return this.http.put(url,data,{headers: this.headers});
     }
 
 }
