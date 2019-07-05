@@ -120,9 +120,23 @@ export class ManageDataTableService extends TerraDataTableBaseService<HistoryDat
         this.data = [];
     }
 
+    public removeEntryByDeviceId(deviceId:number):void
+    {
+        let updatedArray = [];
+        for (let device of this.data) {
+            if (device.deviceId !== deviceId) {
+                updatedArray.push(device);
+            }
+        }
+        this.data = updatedArray;
+    }
+
     public dataToRowMapping(entry:HistoryDataTableInterface):TerraDataTableRowInterface<HistoryDataTableInterface>
     {
         let cellList:Array<TerraDataTableCellInterface> = [
+            {
+                data: entry.name
+            },
             {
                 data: entry.user
             },

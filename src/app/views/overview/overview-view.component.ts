@@ -15,6 +15,7 @@ import { HistoryDataTableService } from './table/history-table.service';
 import { SettingsInterface } from '../settings/settings-view.component';
 import { HistoryDataTableInterface } from './table/history-data-table.interface';
 
+
 function isNullOrUndefined(object:any):boolean
 {
     return object === undefined || object === null;
@@ -140,8 +141,7 @@ export class OverviewViewComponent implements OnInit
     constructor(
                 private _statsDataService:OverviewDataService,
                 private _historyService:HistoryDataTableService,
-                private _alert:AlertService
-    )
+                private _alert:AlertService)
     {
         this.headerList = this.createHeaderList();
     }
@@ -647,7 +647,8 @@ export class OverviewViewComponent implements OnInit
                                 attributes: article.variationAttributeValues,
                                 properties: article.properties,
                                 available: article.isAvailable,
-                                user: article.user
+                                user: article.user,
+                                rent_until: article.rent_until
                             });
 
                         if(article.isAvailable == 0){
@@ -679,6 +680,67 @@ export class OverviewViewComponent implements OnInit
         this.articles = this.articlesResult;
     }
 
+    public exportCSV():void
+    {
+        let dateOptions:Object = { year: 'numeric', month: '2-digit', day: '2-digit'};
+        let dateName = new Date().toLocaleDateString('de-DE', dateOptions).split(".").join("-");
+
+        let filename = "EquipmentRental-"+dateName+".csv";
+        let data = [];
+        for(let article of this.articles)
+        {
+            let properties = "";
+            if(article.properties.length > 0){
+                for(let property of article.properties)
+                {
+                    if(!isNullOrUndefined(property.relationValues[0].value) && property.relationValues[0].value.length > 0)
+                    {
+                        properties += this.propertyNames[property.propertyRelation.position]+': ';
+                        properties += property.relationValues[0].value+'<br>';
+                    }
+
+                }
+            }
+            let rent_until = "";
+            if(article.available == 0)
+            {
+                rent_until = article.rent_until == 0 ? "Unbestimmte Zeit" : new Date(article.rent_until * 1000).toLocaleDateString('de-DE', dateOptions);
+            }
+            let newArticle:Object = {
+                id:article.id,
+                name:article.name,
+                category:this.categoryNames.get(article.category),
+                user:article.user,
+                image:article.image,
+                available:article.available === 1 ? "Verfügbar" : "Ausgeliehen",
+                rent_until:rent_until,
+                properties: properties,
+            };
+            console.log(JSON.stringify(newArticle));
+            data.push(newArticle);
+        }
+        const replacer = (key, value) => value === null ? '' : value; // specify how you want to handle null values here
+        const header = Object.keys(data[0]);
+        let csv = data.map(row => header.map(fieldName => JSON.stringify(row[fieldName], replacer).split("<br>").join('\n')).join(','));
+        csv.unshift(header.join(','));
+        let csvArray = csv.join('\r\n');
+
+        let blob = new Blob([csvArray], {type: 'text/csv' })
+        let url = window.URL.createObjectURL(blob);
+
+        //Save or make hidden A tag and click it
+        if(navigator.msSaveOrOpenBlob) {
+            navigator.msSaveBlob(blob, filename);
+        } else {
+            let a = document.createElement("a");
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+        window.URL.revokeObjectURL(url);
+    }
 
     private refreshHistory(id:number):void
     {
@@ -693,7 +755,7 @@ export class OverviewViewComponent implements OnInit
     public showHistory(id:number):void
     {
         this.isLoading = true;
-        let dateOptions:Object = { year: 'numeric', month: 'numeric', day: 'numeric' };
+        let dateOptions:Object = { year: 'numeric', month: '2-digit', day: '2-digit' };
 
         if(!isNullOrUndefined(history[id]))
             this.history[id] = undefined;

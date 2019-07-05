@@ -1,5 +1,6 @@
 export interface HistoryDataTableInterface
 {
+    name?:string;
     user?:any;
     adminUser?:any;
     comment?:string;

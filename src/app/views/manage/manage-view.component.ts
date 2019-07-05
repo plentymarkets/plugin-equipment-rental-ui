@@ -27,7 +27,10 @@ export class ManageViewComponent
     public manageOverlay:TerraOverlayComponent;
 
     @ViewChild('sendMailOption')
-    public sendMailOption:TerraCheckboxComponent;
+    public sendMailOption;
+
+    @ViewChild('giveBackOption')
+    public giveBackOption;
 
     protected readonly headerList:Array<TerraDataTableHeaderCellInterface>;
 
@@ -48,6 +51,12 @@ export class ManageViewComponent
     private createHeaderList():Array<TerraDataTableHeaderCellInterface>
     {
         return [
+            {
+                caption: 'Name',
+                sortBy:  'name',
+                width:   10,
+                textAlign: TerraTextAlignEnum.LEFT
+            },
             {
                 caption: 'Verliehen an',
                 sortBy:  'user',
@@ -78,7 +87,7 @@ export class ManageViewComponent
     public loadHistoryData():void
     {
         this.isLoading = true;
-        let dateOptions:any = { year: 'numeric', month: 'numeric', day: 'numeric' };
+        let dateOptions:any = { year: 'numeric', month: '2-digit', day: '2-digit' };
 
         this._manageService.clearEntrys();
 
@@ -90,6 +99,7 @@ export class ManageViewComponent
                     let diffDays:number = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
                     let historyItem:HistoryDataTableInterface = {
+                        name: deviceHistory.name,
                         user: deviceHistory.user,
                         adminUser: deviceHistory.adminUser,
                         comment: deviceHistory.comment,
@@ -120,7 +130,7 @@ export class ManageViewComponent
 
     protected executePopupFunction(selectedRows:Array<TerraDataTableRowInterface<HistoryDataTableInterface>>):void
     {
-        if(!this.sendMailOption.value)
+        if(!this.sendMailOption && !this.giveBackOption)
         {
             this._alert.error('Es wurde keine Aktion ausgewählt');
             return;
@@ -133,16 +143,53 @@ export class ManageViewComponent
                 userId: row.data.user.id,
                 deviceId: row.data.deviceId
             };
-            this._statsDataService.putRestCallData('plugin/equipmentRental/rentalDevice/remindEmail',data).subscribe((response:Array<any>) =>
-                {
-                    this.sendMailOption.writeValue(false)
-                    this._alert.success('Die Aktion wurde erfolgreich ausgeführt');
-                }, error =>
-                {
-                    this._alert.error('Fehler beim Senden der E-Mail an '+row.data.user.email);
-                }
-            );
+
+            if(this.sendMailOption)
+            {
+                this._statsDataService.putRestCallData('plugin/equipmentRental/rentalDevice/remindEmail',data).subscribe((response:Array<any>) =>
+                    {
+                        this._alert.success('Die Aktion wurde erfolgreich ausgeführt');
+                    }, error =>
+                    {
+                        this._alert.error('Fehler beim Senden der E-Mail an '+row.data.user.email);
+                    }
+                );
+            }
+
+            if(this.giveBackOption)
+            {
+                let extraData:any = {
+                    comment : "",
+                    status: ""
+                };
+                this._statsDataService.putRestCallData('plugin/equipmentRental/rentalDevice/' + row.data.deviceId, extraData).subscribe((response:Array<any>) =>
+                    {
+                        this._alert.success('Das Gerät wurde erfolgreich zurückgegeben');
+                        this._manageService.removeEntryByDeviceId(row.data.deviceId);
+                        this._manageService.getResults();
+
+                    }, error =>
+                    {
+                        this._alert.error('Fehler beim Zurückgeben des Gerätes');
+                    }
+                );
+            }
         }
+        this.giveBackOption = false;
+        this.sendMailOption = false;
+        //this.loadHistoryData();
+    }
+
+    public expiredDateClass(rent_until:number):string
+    {
+        if(this.isNumber(rent_until))
+        {
+            if(rent_until < 0)
+                return "red"
+            else if(rent_until == 0)
+                return "yellow"
+        }
+        return "";
     }
 
     public isNumber(object:any):boolean

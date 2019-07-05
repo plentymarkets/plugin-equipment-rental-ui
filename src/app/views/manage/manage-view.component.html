@@ -12,8 +12,12 @@
         <terra-portlet>
             <table class="table table-striped table-group-option">
                 <tr>
-                    <td><terra-checkbox #sendMailOption></terra-checkbox></td>
+                    <td><terra-checkbox [(ngModel)]="sendMailOption"></terra-checkbox></td>
                     <td>E-Mail senden</td>
+                </tr>
+                <tr>
+                    <td><terra-checkbox [(ngModel)]="giveBackOption"></terra-checkbox></td>
+                    <td>Rückgabe buchen</td>
                 </tr>
             </table>
         </terra-portlet>
@@ -36,12 +40,13 @@
     </terra-group-function>
     <tbody>
     <tr [tcTableRow]="row" hasContextMenu [rowData]="row.data" *ngFor="let row of _manageService.rowList; let index = index">
+        <td>{{ row.data.name }}</td>
         <td>
             {{ capitalize(row.data.user.firstname) }} {{ capitalize(row.data.user.lastname) }}
         </td>
         <td>{{ row.data.comment }}</td>
         <td>{{ row.data.created_at }}</td>
-        <td [ngClass]="isNumber(row.data.rent_until) && row.data.rent_until < 0 ? 'red' : ''">
+        <td [ngClass]="expiredDateClass(row.data.rent_until)">
             <ng-template [ngIf]="isNumber(row.data.rent_until)" [ngIfElse]="rentUntilString">
                 <ng-template [ngIf]="row.data.rent_until <= 0" [ngIfElse]="rentUntilTimeLeft">
                     <ng-template [ngIf]="row.data.rent_until == 0">

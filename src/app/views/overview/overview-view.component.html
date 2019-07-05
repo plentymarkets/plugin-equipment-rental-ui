@@ -38,6 +38,12 @@
         </terra-filter>
     </div>
     <terra-portlet center>
+        <terra-button *ngIf="!isLoading" inputIcon='icon-save'
+                      [inputTooltipText]="'CSV Exportieren'"
+                      [inputTooltipPlacement]="'bottom'"
+                      (click)="exportCSV()"
+        >
+        </terra-button><br/>
         <div *ngIf="isLoading" class="loadingComponent">
             <terra-loading-spinner></terra-loading-spinner>
             Loading...
