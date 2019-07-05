@@ -4,7 +4,6 @@ import {
 } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { PluginEquipmentRentalComponent } from './plugin-equipment-rental.component';
-import { HttpModule } from '@angular/http';
 import {
     L10nLoader,
     TranslationModule
@@ -13,12 +12,11 @@ import { FormsModule } from '@angular/forms';
 import { l10nConfig } from './core/localization/l10n.config';
 import { HttpClientModule } from '@angular/common/http';
 import { TerraComponentsModule } from '@plentymarkets/terra-components/app';
-import { RouterModule } from '@angular/router';
 import { RouterViewComponent } from './views/router/router-view.component';
-import { TerraNodeTreeConfig } from '@plentymarkets/terra-components';
+import {httpInterceptorProviders, TerraNodeTreeConfig} from '@plentymarkets/terra-components';
 import { OverviewViewComponent } from './views/overview/overview-view.component';
 
-import { OverviewDataService } from './views/overview/overview-view.service'; // import the example service
+import { OverviewDataService } from './views/overview/overview-view.service';
 import { TooltipModule } from 'ngx-bootstrap';
 import {
     appRoutingProviders,
@@ -31,7 +29,6 @@ import {SettingsViewComponent} from "./views/settings/settings-view.component";
 @NgModule({
     imports:      [
         BrowserModule,
-        HttpModule,
         FormsModule,
         HttpClientModule,
         TranslationModule.forRoot(l10nConfig),
@@ -49,6 +46,7 @@ import {SettingsViewComponent} from "./views/settings/settings-view.component";
     providers:    [
         TerraNodeTreeConfig,
         OverviewDataService,
+        httpInterceptorProviders,
         {
             provide:    APP_INITIALIZER,
             useFactory: initL10n,
