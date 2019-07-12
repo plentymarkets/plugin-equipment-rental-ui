@@ -37,26 +37,40 @@
             </terra-select-box>
         </terra-filter>
     </div>
-    <terra-portlet center>
-        <terra-button *ngIf="!isLoading" inputIcon='icon-save'
-                      [inputTooltipText]="'CSV Exportieren'"
-                      [inputTooltipPlacement]="'bottom'"
-                      (click)="exportCSV()"
-        >
-        </terra-button><br/>
-        <div *ngIf="isLoading" class="loadingComponent">
-            <terra-loading-spinner></terra-loading-spinner>
-            Loading...
-        </div>
-        <terra-card *ngFor="let article of articles" inputImagePath="{{ article.image }}" (click)="onClickTerraCard(article.id)"  [tooltip]="article.available == 0 ? 'Dieses Gerät ist verliehen an '+article.user : ''" placement="bottom" [className]="article.available == 0 ? 'rent' : 'available'">
-            <div terra-card-header>
-                <p>{{ article.name }}</p>
+
+    <div center>
+        <terra-base-toolbar *ngIf="!isLoading">
+            <div class="btn-group" role="group">
+                <terra-button inputIcon='icon-export'
+                              [inputTooltipText]="'CSV Exportieren'"
+                              [inputTooltipPlacement]="'bottom'"
+                              (click)="exportCSV()"
+                >
+                </terra-button><br/>
             </div>
-            <div terra-card-footer>
-                <p>&nbsp;</p>
+        </terra-base-toolbar>
+        <terra-portlet>
+            <div *ngIf="isLoading" class="loadingComponent">
+                <terra-loading-spinner></terra-loading-spinner>
+                Loading...
             </div>
-        </terra-card>
-    </terra-portlet>
+            <terra-card *ngIf="!isLoading" [tooltip]="'Neuen Artikel anlegen'" placement="bottom" style="float:left;" inputPlaceholderIcon="icon-add">
+                <div terra-card-header>
+                    <p>Neuen Artikel anlegen</p>
+                </div>
+                <div terra-card-footer>
+                </div>
+            </terra-card>
+            <terra-card *ngFor="let article of articles" inputImagePath="{{ article.image }}" (click)="onClickTerraCard(article.id)"  [tooltip]="article.available == 0 ? 'Dieses Gerät ist verliehen an '+article.user : ''" placement="bottom" [className]="article.available == 0 ? 'rent' : 'available'">
+                <div terra-card-header>
+                    <p>{{ article.name }}</p>
+                </div>
+                <div terra-card-footer>
+                    <p>&nbsp;</p>
+                </div>
+            </terra-card>
+        </terra-portlet>
+    </div>
     <div class="rightColumn" right>
         <div class="container-fluid">
             <div class="row">
