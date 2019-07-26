@@ -20,9 +20,6 @@ const appRoutes:Routes = [
         children:[
             {
                 path: '',
-                data:        {
-                    label:       'menu'
-                },
                 redirectTo: 'overview',
                 pathMatch: 'full'
             },
@@ -38,7 +35,14 @@ const appRoutes:Routes = [
                 component: OverviewViewComponent,
                 data: {
                     label: 'Geräteübersicht'
-                }
+                },
+            },
+            {
+                path: 'overview/:deviceId',
+                component: OverviewViewComponent,
+                data: {
+                    label: 'Verleihen'
+                },
             },
             {
                 path: 'manage',
