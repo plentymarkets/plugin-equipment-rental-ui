@@ -30,22 +30,6 @@ const appRoutes:Routes = [
                     label: 'Einstellungen'
                 }
             },
-/*            {
-                path: 'overview',
-                component: OverviewViewComponent,
-                data: {
-                    label: 'Geräteübersicht'
-                },
-                children: [
-                    {
-                        path:      ':deviceId',
-                        component: OverviewViewComponent,
-                        data:      {
-                            label:      'Verleihen',
-                        }
-                    }
-                ]
-            },*/
             {
                 path: 'overview',
                 component: OverviewViewComponent,
