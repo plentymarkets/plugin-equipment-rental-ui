@@ -184,6 +184,13 @@ export class OverviewViewComponent implements OnInit, OnDestroy
         this.loadPage(2);
         this.loadRentInformation(deviceId,true);
         this.isLoading = true;
+        this.searchName = "";
+        this.firstName = "";
+        this.lastName = "";
+        this.email = "";
+        this.comment = "";
+        this.giveBackComment = "";
+        this.statusOption = "";
         this.updateBreadcrumbByDeviceId(deviceId);
     }
 
