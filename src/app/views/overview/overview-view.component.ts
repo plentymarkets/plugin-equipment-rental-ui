@@ -3,7 +3,6 @@ import {
     OnInit,
     OnDestroy
 } from '@angular/core';
-import { ArticleInterface } from '../../core/article.interface';
 import { OverviewDataService } from './overview-view.service';
 import {
     TerraSelectBoxValueInterface,
@@ -13,10 +12,12 @@ import {
 }
 from '@plentymarkets/terra-components';
 import { HistoryDataTableService } from './table/history-table.service';
-import { SettingsInterface } from '../settings/settings-view.component';
-import { HistoryDataTableInterface } from './table/history-data-table.interface';
-import { ActivatedRoute,Router,NavigationEnd,NavigationStart } from "@angular/router";
-import {RouterViewComponent} from "../router/router-view.component";
+import { HistoryDataTableInterface } from '../../interfaces/history-data-table.interface';
+import { ActivatedRoute, Router, NavigationEnd, NavigationStart } from "@angular/router";
+import { RouterViewComponent } from "../router/router-view.component";
+import { RentInterface } from '../../interfaces/rent.interface';
+import { UserInterface } from '../../interfaces/user.interface';
+import { SettingsInterface } from '../../interfaces/settings.interface';
 
 
 function isNullOrUndefined(object:any):boolean
@@ -24,29 +25,10 @@ function isNullOrUndefined(object:any):boolean
     return object === undefined || object === null;
 }
 
-export interface RentInterface
-{
-    id?:number;
-    deviceId?:number;
-    userId?:number;
-    comment?:string;
-    rent_until?:number;
-    created_at?:number;
-    user?:any;
-    available?:number;
-}
-
-export interface UserInterface{
-    id?:number;
-    firstname?:string;
-    lastname?:string;
-    email?:string;
-}
-
 @Component({
     selector: 'overview-view',
-    styles:   [require('./overview-view.component.scss')],
-    template: require('./overview-view.component.html'),
+    styleUrls:   ['./overview-view.component.scss'],
+    templateUrl: './overview-view.component.html',
     providers: [HistoryDataTableService]
 })
 

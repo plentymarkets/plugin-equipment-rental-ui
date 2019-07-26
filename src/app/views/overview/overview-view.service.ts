@@ -1,14 +1,15 @@
-import {Injectable} from '@angular/core';
-import { HttpClient,HttpHeaders } from '@angular/common/http';
-import {Observable} from 'rxjs';
-import {ArticleInterface} from "../../core/article.interface";
-import {RentInterface} from "./overview-view.component";
-import {TerraSelectBoxValueInterface} from "@plentymarkets/terra-components";
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { TerraSelectBoxValueInterface } from "@plentymarkets/terra-components";
+import { ArticleInterface } from '../../interfaces/article.interface';
+import { environment } from '../../../environments/environment';
+import { RentInterface } from "../../interfaces/rent.interface";
 
 @Injectable()
 export class OverviewDataService
 {
-    protected token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjdkODcyZDJhY2NlNmYwNmU2NGY2NGE1ZDBhOGFiOWJkNTdmYzViNGZjNzI5MjFiYTQ5NmRjZDk2ZDFlZWZhOThkYjBjM2ZhMjQ1YTAzNjgzIn0.eyJhdWQiOiIxIiwianRpIjoiN2Q4NzJkMmFjY2U2ZjA2ZTY0ZjY0YTVkMGE4YWI5YmQ1N2ZjNWI0ZmM3MjkyMWJhNDk2ZGNkOTZkMWVlZmE5OGRiMGMzZmEyNDVhMDM2ODMiLCJpYXQiOjE1NjI5MTE0ODQsIm5iZiI6MTU2MjkxMTQ4NCwiZXhwIjoxNTYyOTk3ODg0LCJzdWIiOiIzIiwic2NvcGVzIjpbIioiXX0.cHb1iHoeK3wxTlu0LLJo10jRvcoERN4LrMItEPNhSlp3mrbxTcE7l9RsSPLyuRFG9UgXkMuxApI6wCPleeTmC3lGO8S8LPGs-Vk9zn-qOMzWizb9t6rsx8Nk750fB_uWZfjKbgs8SaxwgvQ2RVwNBUHuVoCN3lN8AHoTrfv-KstaXs9R8TsXXOY6ObRXZD-okXVT8j0dTTk46PZyW4OvVV59S0gFnCADlS07BLgT5cKrLTTZawD9ZZWzQmCz6Ht6Vl-h19HCJiJ2cW7SAqhi0s3EPbN30dcvoyRAwDOabW91zEZgDr4Qt-AivD75fAvbzb94QKxy7wBHxe7afPYqeWMSXkQOcJ25K4xWLUBton-MPHr_fYJfEJulV-0iF7YGRierXAfjl7FTvOWDAwthJlDUvgjUabkLsXM0BWFGdJCE9epkzG_CcRYyf1My1ezTQ27AoF8mCiQoJqK-wxtb9DR1jT7Jf5oxGEqvNbuWKRp_iTP8QQ75TkbNT01ovcZC4Rzsh96TzDC2IMm_qevIYXEZgOccxiYXsfa3nwuKPcEqqN0fH4-WrzNHlywblhulpLHRB766uBubaMeEwfJ74d303fREjGu9sCU-CHWJBLVEQkQ1VTHalHdVeuqmciurLt_FcnRERIYuHFW2diB-wfK66vc7YsHAq7h1Cc1ieSk';
+    protected token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjJlM2EwYTlmOWNkZjY3MTZmYWFkZmRiYTliOWY0NTI1ZjMwYzk4YTcwZDYwOGM0NTM1NWVjNDNjMTBlZWQxYmVmMmNlYmRmZjY2YWZjMTQxIn0.eyJhdWQiOiIxIiwianRpIjoiMmUzYTBhOWY5Y2RmNjcxNmZhYWRmZGJhOWI5ZjQ1MjVmMzBjOThhNzBkNjA4YzQ1MzU1ZWM0M2MxMGVlZDFiZWYyY2ViZGZmNjZhZmMxNDEiLCJpYXQiOjE1NjQxMjE1NzksIm5iZiI6MTU2NDEyMTU3OSwiZXhwIjoxNTY0MjA3OTc5LCJzdWIiOiIzIiwic2NvcGVzIjpbIioiXX0.h2Yvyu7E2_xD_eaaB2fnsI3EQEQfzVwDgse4jMYoWk77fPP1k-05yQLIqaKWe-aGjImdNLyddXqxWdEb-AaHsW_tb8UPJICwR6IDHrF6a6hy5nQ08899vhPgJDV_ulcwCRWVD1V_7AOMTSYwGI3fy6ok24gAgDh4jIjz1taRZeidXYXRvuJxiMHN4oOENg7YZqiZS2E1ZCJ_k3eO_XLm-JSxyV2MSP8B9LMyxqpez_r3s9i6-A_hgjYsaIaBXsPqDixTxBWzFbivyXs9jrcW2P7Z1mHsZJMTeRwSo9WHUNmRyE5WvHfeSxmkFFlv0zkoVzbjoTjKUT6boKIFpBqPqmWg601mNsjDgujGDG1qq5yelCyVhdLflIO59hn14KoabPcAxy_BYZt_esU1pwZzKOQsSydzZZi6bxcBkiAo-qbKTa_GemBJUwtXLIcFDJwXH_6H0GWhAlxITSqkQIGvQljTSrSND7Uy4vENv_mIcy0-rwz9gorBvpa0b0ZJVAQR5BvrsDqNOC0E4OwleLwapEZO3xO_3E9oRjHfvMie8wlhFFWtsI3FI4yETwWeDGS3W33V7-HYrxrE_p-vx6XfhGMh7Z5LrcXQR58H0E3sGNcoL2fJU6FdK8ett9vVzMfgdKP_sVeT2Vi283364wGKf_t6G9YFA0X1S-PorbzmGqc';
     public url:string = '/';
     public headers:HttpHeaders = new HttpHeaders();
 
@@ -34,7 +35,7 @@ export class OverviewDataService
 
     constructor(private http:HttpClient)
     {
-        if(process.env.ENV !== 'production')
+        if(!environment.production)
         {
             this.url = 'http://master.login.plentymarkets.com' + this.url;
 

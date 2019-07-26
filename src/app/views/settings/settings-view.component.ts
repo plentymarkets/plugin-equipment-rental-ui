@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {OverviewDataService} from "../overview/overview-view.service";
+import { OverviewDataService } from "../overview/overview-view.service";
 
 import {
     TerraMultiCheckBoxValueInterface,
@@ -7,23 +7,22 @@ import {
     TerraTagInterface
 }
 from '@plentymarkets/terra-components';
-import {isNullOrUndefined} from "util";
-export interface SettingsInterface
+import { SettingsInterface } from '../../interfaces/settings.interface';
+
+function isNullOrUndefined(obj:any):boolean
 {
-    id?:number;
-    name?:string;
-    value?:any;
+    return obj === null || obj === undefined;
 }
 
 @Component({
     selector: 'settings-view',
-    template: require('./settings-view.component.html')
+    templateUrl: './settings-view.component.html'
 })
 
 export class SettingsViewComponent
 {
     public isLoading:boolean = false;
-    public emailTemplate:string = "E-Mail Template";
+    public emailTemplate:string = 'E-Mail Template';
     public emailTemplateTopic:string;
     public categoryValues:Array<TerraMultiCheckBoxValueInterface> = [];
     public activeCategorys:Array<TerraTagInterface> = [];

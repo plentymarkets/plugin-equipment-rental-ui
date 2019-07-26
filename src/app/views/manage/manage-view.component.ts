@@ -8,15 +8,14 @@ import {
     TerraTextAlignEnum,
     TerraDataTableRowInterface,
     TerraOverlayComponent,
-    TerraCheckboxComponent,
     AlertService
 } from '@plentymarkets/terra-components';
-import { HistoryDataTableInterface } from '../overview/table/history-data-table.interface';
 import { OverviewDataService } from '../overview/overview-view.service';
+import { HistoryDataTableInterface } from '../../interfaces/history-data-table.interface';
 
 @Component({
     selector: 'manage-view',
-    template: require('./manage-view.component.html'),
+    templateUrl: './manage-view.component.html',
     providers: [ManageDataTableService]
 })
 export class ManageViewComponent

@@ -9,7 +9,8 @@ import {
 } from '@plentymarkets/terra-components';
 import { Observable } from 'rxjs/Observable';
 
-import {HistoryDataTableInterface} from './history-data-table.interface';
+import { HistoryDataTableInterface } from '../../../interfaces/history-data-table.interface';
+import { of } from 'rxjs';
 
 export enum TerraDataTableSortOrderEnum
 {
@@ -75,7 +76,7 @@ export class HistoryDataTableService extends TerraDataTableBaseService<HistoryDa
         }
         if(isNullOrUndefined(params['sortBy']))
         {
-            params['sortBy'] = 'created_at'; //default field to sort by
+            params['sortBy'] = 'created_at'; // default field to sort by
         }
         if(isNullOrUndefined(params['sortOrder']))
         {
@@ -89,7 +90,7 @@ export class HistoryDataTableService extends TerraDataTableBaseService<HistoryDa
         results.entries = entries.slice(firstOnPage, lastOnPage);
 
         // return data
-        return Observable.of(results);
+        return of(results);
     }
 
     private applySorting(data:Array<HistoryDataTableInterface>, sortBy:string,

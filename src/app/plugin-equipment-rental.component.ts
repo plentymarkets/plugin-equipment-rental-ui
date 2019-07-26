@@ -5,9 +5,8 @@ import {
 
 @Component({
     selector:      'plugin-equipment-rental',
-    template:      require('./plugin-equipment-rental.component.html'),
-    styles:        [require('./plugin-equipment-rental.component.scss')],
-    encapsulation: ViewEncapsulation.None
+    templateUrl:      './plugin-equipment-rental.component.html',
+    styleUrls:        ['./plugin-equipment-rental.component.scss']
 })
 export class PluginEquipmentRentalComponent
 {

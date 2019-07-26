@@ -9,8 +9,8 @@ import {
 
 @Component({
     selector: 'router-view',
-    template: require('./router-view.component.html'),
-    styles:   [require('./router-view.component.scss')]
+    templateUrl: './router-view.component.html',
+    styleUrls:   ['./router-view.component.scss']
 })
 export class RouterViewComponent
 {

@@ -1,9 +1,11 @@
 import { enableProdMode } from '@angular/core';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { PluginEquipmentRentalModule }  from './app';
+import { environment } from './environments/environment';
+import { PluginEquipmentRentalModule } from './app/plugin-equipment-rental.module';
 
-if (process.env.ENV === 'production') {
-  enableProdMode();
+if(environment.production)
+{
+    enableProdMode();
 }
 
-platformBrowserDynamic().bootstrapModule(PluginEquipmentRentalModule);
+platformBrowserDynamic().bootstrapModule(PluginEquipmentRentalModule).catch((err:any) => console.error(err));
