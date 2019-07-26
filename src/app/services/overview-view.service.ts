@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { TerraSelectBoxValueInterface } from "@plentymarkets/terra-components";
-import { ArticleInterface } from '../../interfaces/article.interface';
-import { environment } from '../../../environments/environment';
-import { RentInterface } from "../../interfaces/rent.interface";
+import { ArticleInterface } from '../interfaces/article.interface';
+import { RentInterface } from "../interfaces/rent.interface";
+import { environment } from "../../environments/environment";
 
 @Injectable()
 export class OverviewDataService

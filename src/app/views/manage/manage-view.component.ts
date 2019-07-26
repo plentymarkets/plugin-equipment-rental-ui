@@ -2,7 +2,7 @@ import {
     Component,
     ViewChild
 } from '@angular/core';
-import { ManageDataTableService } from '../overview/table/manage-table.service';
+import { ManageDataTableService } from '../../services/manage-table.service';
 import {
     TerraDataTableHeaderCellInterface,
     TerraTextAlignEnum,
@@ -10,7 +10,7 @@ import {
     TerraOverlayComponent,
     AlertService
 } from '@plentymarkets/terra-components';
-import { OverviewDataService } from '../overview/overview-view.service';
+import { OverviewDataService } from '../../services/overview-view.service';
 import { HistoryDataTableInterface } from '../../interfaces/history-data-table.interface';
 
 @Component({

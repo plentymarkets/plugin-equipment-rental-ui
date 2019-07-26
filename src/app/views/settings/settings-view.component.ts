@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { OverviewDataService } from "../overview/overview-view.service";
+import { OverviewDataService } from "../../services/overview-view.service";
 
 import {
     TerraMultiCheckBoxValueInterface,

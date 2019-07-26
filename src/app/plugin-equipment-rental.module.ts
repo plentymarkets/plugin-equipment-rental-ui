@@ -30,7 +30,7 @@ import { OverviewViewComponent } from './views/overview/overview-view.component'
 import { ManageViewComponent } from './views/manage/manage-view.component';
 import { SettingsViewComponent } from './views/settings/settings-view.component';
 import { TooltipModule } from 'ngx-bootstrap';
-import { OverviewDataService } from './views/overview/overview-view.service';
+import { OverviewDataService } from './services/overview-view.service';
 
 @NgModule({
     imports:      [

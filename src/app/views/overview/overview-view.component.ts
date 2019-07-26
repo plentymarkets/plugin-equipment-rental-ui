@@ -3,7 +3,6 @@ import {
     OnInit,
     OnDestroy
 } from '@angular/core';
-import { OverviewDataService } from './overview-view.service';
 import {
     TerraSelectBoxValueInterface,
     TerraDataTableHeaderCellInterface,
@@ -11,13 +10,14 @@ import {
     AlertService
 }
 from '@plentymarkets/terra-components';
-import { HistoryDataTableService } from './table/history-table.service';
+import { HistoryDataTableService } from '../../services/history-table.service';
 import { HistoryDataTableInterface } from '../../interfaces/history-data-table.interface';
 import { ActivatedRoute, Router, NavigationEnd, NavigationStart } from "@angular/router";
 import { RouterViewComponent } from "../router/router-view.component";
 import { RentInterface } from '../../interfaces/rent.interface';
 import { UserInterface } from '../../interfaces/user.interface';
 import { SettingsInterface } from '../../interfaces/settings.interface';
+import {OverviewDataService} from "../../services/overview-view.service";
 
 
 function isNullOrUndefined(object:any):boolean

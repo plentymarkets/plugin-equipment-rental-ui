@@ -9,8 +9,8 @@ import {
 } from '@plentymarkets/terra-components';
 import { Observable } from 'rxjs/Observable';
 
-import { HistoryDataTableInterface } from '../../../interfaces/history-data-table.interface';
 import { of } from 'rxjs';
+import { HistoryDataTableInterface } from '../interfaces/history-data-table.interface';
 
 export enum TerraDataTableSortOrderEnum
 {
@@ -20,7 +20,7 @@ export enum TerraDataTableSortOrderEnum
 function isNullOrUndefined(object: any):boolean { return object === undefined || object === null};
 
 @Injectable()
-export class HistoryDataTableService extends TerraDataTableBaseService<HistoryDataTableInterface, TerraPagerParameterInterface>
+export class ManageDataTableService extends TerraDataTableBaseService<HistoryDataTableInterface, TerraPagerParameterInterface>
 {
     private data:Array<HistoryDataTableInterface> = [];
 
@@ -28,24 +28,24 @@ export class HistoryDataTableService extends TerraDataTableBaseService<HistoryDa
     constructor()
     {
         super();
-        this.defaultPagingSize = 5; // set default items per page
+        this.defaultPagingSize = 25; // set default items per page
 
         this.pagingSizes = [ // set values for "items per page" dropdown
             {
-                value:   5,
-                caption: '5'
+                value:   25,
+                caption: '25'
             },
             {
-                value:   10,
-                caption: '10'
+                value:   50,
+                caption: '50'
             },
             {
-                value:   15,
-                caption: '15'
+                value:   75,
+                caption: '75'
             },
             {
-                value:   20,
-                caption: '20'
+                value:   100,
+                caption: '100'
             }
         ];
     }
@@ -76,7 +76,7 @@ export class HistoryDataTableService extends TerraDataTableBaseService<HistoryDa
         }
         if(isNullOrUndefined(params['sortBy']))
         {
-            params['sortBy'] = 'created_at'; // default field to sort by
+            params['sortBy'] = 'created_at'; //default field to sort by
         }
         if(isNullOrUndefined(params['sortOrder']))
         {
@@ -121,25 +121,28 @@ export class HistoryDataTableService extends TerraDataTableBaseService<HistoryDa
         this.data = [];
     }
 
-    public capitalize(string:string):string
+    public removeEntryByDeviceId(deviceId:number):void
     {
-        return string.charAt(0).toUpperCase() + string.slice(1);
+        let updatedArray = [];
+        for (let device of this.data) {
+            if (device.deviceId !== deviceId) {
+                updatedArray.push(device);
+            }
+        }
+        this.data = updatedArray;
     }
 
     public dataToRowMapping(entry:HistoryDataTableInterface):TerraDataTableRowInterface<HistoryDataTableInterface>
     {
         let cellList:Array<TerraDataTableCellInterface> = [
             {
+                data: entry.name
+            },
+            {
                 data: entry.user
             },
             {
-                data: entry.adminUser
-            },
-            {
                 data: entry.comment
-            },
-            {
-                data: entry.getBackComment
             },
             {
                 data: entry.rent_until
@@ -148,18 +151,9 @@ export class HistoryDataTableService extends TerraDataTableBaseService<HistoryDa
                 data: entry.created_at
             },
             {
-                data: entry.status
-            },
-            {
                 data: entry.deviceId
-            },
+            }
         ];
-
-        //Uppercase first letter of word
-        if(!isNullOrUndefined(entry.user.firstname))
-        {
-            entry.user = this.capitalize(entry.user.firstname) + " " + this.capitalize(entry.user.lastname);
-        }
 
         return {
             cellList:      cellList,
