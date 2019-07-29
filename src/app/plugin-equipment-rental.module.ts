@@ -31,6 +31,7 @@ import { ManageViewComponent } from './views/manage/manage-view.component';
 import { SettingsViewComponent } from './views/settings/settings-view.component';
 import { TooltipModule } from 'ngx-bootstrap';
 import { OverviewDataService } from './services/overview-view.service';
+import { CreateItemComponent } from './views/create-item/create-item.component';
 
 @NgModule({
     imports:      [
@@ -50,7 +51,8 @@ import { OverviewDataService } from './services/overview-view.service';
         RouterViewComponent,
         OverviewViewComponent,
         ManageViewComponent,
-        SettingsViewComponent
+        SettingsViewComponent,
+        CreateItemComponent
     ],
     providers:    [
         {

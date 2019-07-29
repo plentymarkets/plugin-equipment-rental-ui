@@ -4,9 +4,10 @@ import {
     Routes
 } from '@angular/router';
 import { RouterViewComponent } from './views/router/router-view.component';
-import {OverviewViewComponent} from "./views/overview/overview-view.component";
+import { OverviewViewComponent } from "./views/overview/overview-view.component";
 import { ManageViewComponent } from "./views/manage/manage-view.component";
 import { SettingsViewComponent } from "./views/settings/settings-view.component";
+import {CreateItemComponent} from "./views/create-item/create-item.component";
 
 const appRoutes:Routes = [
     {
@@ -49,6 +50,13 @@ const appRoutes:Routes = [
                 component: ManageViewComponent,
                 data: {
                     label: 'Verleihübersicht'
+                }
+            },
+            {
+                path: 'create-item',
+                component: CreateItemComponent,
+                data: {
+                    label: 'Artikel anlegen'
                 }
             }
         ]

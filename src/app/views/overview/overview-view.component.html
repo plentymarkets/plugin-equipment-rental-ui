@@ -40,7 +40,7 @@
                 <terra-loading-spinner></terra-loading-spinner>
                 Loading...
             </div>
-            <terra-card *ngIf="!isLoading" [tooltip]="'Neuen Artikel anlegen'" placement="bottom" style="float:left;" inputPlaceholderIcon="icon-add">
+            <terra-card *ngIf="!isLoading" [tooltip]="'Neuen Artikel anlegen'" placement="bottom" style="float:left;" inputPlaceholderIcon="icon-add" (click)="loadCreateItem()">
                 <div terra-card-header>
                     <p>Neuen Artikel anlegen</p>
                 </div>

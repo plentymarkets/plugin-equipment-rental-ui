@@ -412,6 +412,11 @@ export class OverviewViewComponent implements OnInit, OnDestroy
         this.router.navigateByUrl('plugin/overview/'+id);
     }
 
+    private loadCreateItem():void
+    {
+        this.router.navigateByUrl('plugin/create-item');
+    }
+
     private actualTime():number
     {
         return new Date().getTime() / 1000;
