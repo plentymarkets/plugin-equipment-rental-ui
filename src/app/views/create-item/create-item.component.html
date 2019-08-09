@@ -1,10 +1,25 @@
+<terra-base-toolbar>
+  <div class="btn-group" role="group">
+    <terra-button [inputIcon]="'icon-save'"
+                  [inputTooltipText]="'Save'"
+                  [inputTooltipPlacement]="'bottom'"
+                  (click)="createItem()">
+    </terra-button>
+  </div>
+</terra-base-toolbar>
 <div class="col-md-6">
   <terra-portlet inputPortletHeader="Artikel anlegen">
     <terra-text-input inputName="Artikelname"
                       [(ngModel)]="name">
     </terra-text-input>
     <terra-file-input
-            inputName="Bild">
+            inputName="Bild"
+            [(ngModel)]="image">
     </terra-file-input>
+    <terra-select-box
+            inputName="category"
+            [inputListBoxValues]="_selectCategory"
+            [(ngModel)]="category">
+    </terra-select-box>
   </terra-portlet>
 </div>

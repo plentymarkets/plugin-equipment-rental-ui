@@ -37,8 +37,8 @@ export class OverviewDataService
     {
         if(!environment.production)
         {
-            this.token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjJlM2EwYTlmOWNkZjY3MTZmYWFkZmRiYTliOWY0NTI1ZjMwYzk4YTcwZDYwOGM0NTM1NWVjNDNjMTBlZWQxYmVmMmNlYmRmZjY2YWZjMTQxIn0.eyJhdWQiOiIxIiwianRpIjoiMmUzYTBhOWY5Y2RmNjcxNmZhYWRmZGJhOWI5ZjQ1MjVmMzBjOThhNzBkNjA4YzQ1MzU1ZWM0M2MxMGVlZDFiZWYyY2ViZGZmNjZhZmMxNDEiLCJpYXQiOjE1NjQxMjE1NzksIm5iZiI6MTU2NDEyMTU3OSwiZXhwIjoxNTY0MjA3OTc5LCJzdWIiOiIzIiwic2NvcGVzIjpbIioiXX0.h2Yvyu7E2_xD_eaaB2fnsI3EQEQfzVwDgse4jMYoWk77fPP1k-05yQLIqaKWe-aGjImdNLyddXqxWdEb-AaHsW_tb8UPJICwR6IDHrF6a6hy5nQ08899vhPgJDV_ulcwCRWVD1V_7AOMTSYwGI3fy6ok24gAgDh4jIjz1taRZeidXYXRvuJxiMHN4oOENg7YZqiZS2E1ZCJ_k3eO_XLm-JSxyV2MSP8B9LMyxqpez_r3s9i6-A_hgjYsaIaBXsPqDixTxBWzFbivyXs9jrcW2P7Z1mHsZJMTeRwSo9WHUNmRyE5WvHfeSxmkFFlv0zkoVzbjoTjKUT6boKIFpBqPqmWg601mNsjDgujGDG1qq5yelCyVhdLflIO59hn14KoabPcAxy_BYZt_esU1pwZzKOQsSydzZZi6bxcBkiAo-qbKTa_GemBJUwtXLIcFDJwXH_6H0GWhAlxITSqkQIGvQljTSrSND7Uy4vENv_mIcy0-rwz9gorBvpa0b0ZJVAQR5BvrsDqNOC0E4OwleLwapEZO3xO_3E9oRjHfvMie8wlhFFWtsI3FI4yETwWeDGS3W33V7-HYrxrE_p-vx6XfhGMh7Z5LrcXQR58H0E3sGNcoL2fJU6FdK8ett9vVzMfgdKP_sVeT2Vi283364wGKf_t6G9YFA0X1S-PorbzmGqc';
-            this.url = 'http://master.login.plentymarkets.com' + this.url;
+            this.token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImU2M2Y2NWMxZDY5YWY3MmE1ZDI0NTk3MDBhYzk0OTFiNzFmNDU3YWQzNmJjN2IwMzE3ZTNhZjJhNzIyODY3Yjg3YjFlMjE2NmMwN2QxNjFjIn0.eyJhdWQiOiIxIiwianRpIjoiZTYzZjY1YzFkNjlhZjcyYTVkMjQ1OTcwMGFjOTQ5MWI3MWY0NTdhZDM2YmM3YjAzMTdlM2FmMmE3MjI4NjdiODdiMWUyMTY2YzA3ZDE2MWMiLCJpYXQiOjE1NjUzMzE1MTksIm5iZiI6MTU2NTMzMTUxOSwiZXhwIjoxNTY1NDE3OTE5LCJzdWIiOiIzIiwic2NvcGVzIjpbIioiXX0.SMShp3gdoQKzAeGlboTcNT0yGMe9zT0H_w-8UyD5zQLAjJIBDmpdtONMZbu-AMH9bJRhWbEE2apco5sKM2Rgha4uCGQg1V5iz4eagqoPmramG2uVFOZndmq1YC5AbPpdaI-FN3-xGkS1w2kwZlDHfNN9TKqnLNHPmY4bGIJJ07rmHMBYWmWHshvemYfz_WPjy8KbRRlq4JAi1RwYc9T6uiE8VkKZmUbRPGcRFXhtPu83HrEHPNcufZR5KDvqgslXQWJ0Rk4qfbtnaWN1et0tUBxeseXYPy3LBPnsl5fXthOOPHr_2Yf6hj2m9wsiaMdI6EQjhy63dkSidEVaACMZVl_D0fFFgCRLRHC4b_08GD03j7wFrnBjn-SG4_GCY_d8ywCGJWWMhDXW_wPk9ief_4HdCkR_xtUf26_WHeYxKWewSQ5nnxf0tT7HEHaDrhQwEG9gockYXuhBeK-wjTZGeWz2wjDTQOoeVdLBZsftFdNCse3gWucegc4ruaGwYu1VVuwK7wUFBm7O_jsCo1K17Ew6NVgFgR6aMF9cEBpm8klqfLkWA5gR9bhXHT62Q6RqABjQNcWeGbfqJinp441w-VDxBFDJagrsUQgHkkcb7AgSd-fqauF057Sbfgyt4ALMGqxLFdKX2AVWQcdNayS5hW8L9DnXv96vKMqLKlZwxCQ';
+            this.url = 'http://master.login.plentymarkets.com/' + this.url;
 
             localStorage.setItem('accessToken', this.token);
         }
@@ -71,6 +71,19 @@ export class OverviewDataService
         return this.http.put(this.url + restRoute, data,{
             headers: this.headers
         });
+    }
+
+    public isJsonString(str:string):boolean
+    {
+        try
+        {
+            let json:any = JSON.parse(str);
+            return (typeof json === 'object' && json.length > 0);
+        }
+        catch (e)
+        {
+            return false;
+        }
     }
 
 }
