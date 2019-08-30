@@ -1,25 +1,82 @@
-<terra-base-toolbar>
-  <div class="btn-group" role="group">
-    <terra-button [inputIcon]="'icon-save'"
-                  [inputTooltipText]="'Save'"
-                  [inputTooltipPlacement]="'bottom'"
-                  (click)="createItem()">
-    </terra-button>
-  </div>
-</terra-base-toolbar>
-<div class="col-md-6">
-  <terra-portlet inputPortletHeader="Artikel anlegen">
-    <terra-text-input inputName="Artikelname"
-                      [(ngModel)]="name">
-    </terra-text-input>
-    <terra-file-input
-            inputName="Bild"
-            [(ngModel)]="image">
-    </terra-file-input>
-    <terra-select-box
-            inputName="category"
-            [inputListBoxValues]="_selectCategory"
-            [(ngModel)]="category">
-    </terra-select-box>
+<div *ngIf="isLoading; then loadingBlock else contentBlock"></div>
+<ng-template #loadingBlock>
+  <terra-portlet>
+    <div *ngIf="isLoading" class="loadingComponent">
+      <terra-loading-spinner></terra-loading-spinner>
+      Loading...
+    </div>
   </terra-portlet>
-</div>
+</ng-template>
+<ng-template #contentBlock>
+  <terra-base-toolbar>
+    <div class="btn-group" role="group">
+      <terra-button [inputIcon]="'icon-save'"
+                    [inputTooltipText]="'Save'"
+                    [inputTooltipPlacement]="'bottom'"
+                    (click)="createItem()">
+      </terra-button>
+    </div>
+  </terra-base-toolbar>
+  <div class="col-md-6">
+    <terra-portlet inputPortletHeader="Artikel anlegen">
+      <terra-text-input inputName="Artikelname"
+                        [(ngModel)]="name">
+      </terra-text-input>
+      <terra-file-input
+              inputName="Bild"
+              [(ngModel)]="image">
+      </terra-file-input>
+
+      <input
+              style="display: none"
+              type="file" (change)="onFileChanged($event)"
+              #fileInput>
+      <terra-button (click)="fileInput.click()"
+                    inputCaption="Bild auswählen"
+                    inputIcon="icon-upload">
+      </terra-button>
+      <p *ngIf="this.selectedFile">{{ this.selectedFile.name }}</p>
+      <img [src]="imgURL" height="200" *ngIf="imgURL">
+
+      <terra-select-box
+              inputName="category"
+              [inputListBoxValues]="_selectCategory"
+              [(ngModel)]="category">
+      </terra-select-box>
+
+
+      <div class="col-xs-12" style="padding-top:10px;padding-bottom:10px;">
+        <terra-toggle [(ngModel)]="propertyToggle"></terra-toggle>
+        Eigenschaften setzen
+      </div>
+      <div class="btn-group" role="group" *ngIf="propertyToggle">
+        <terra-button [inputIcon]="'icon-add'"
+                      [inputTooltipText]="'Add'"
+                      [inputTooltipPlacement]="'bottom'"
+                      (click)="addAttribute()">
+        </terra-button>
+      </div>
+
+      <table class="table table-striped" *ngIf="propertyToggle">
+        <thead>
+        <tr>
+          <th>Eigenschaft</th>
+          <th>Inhalt</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let property of this._statsDataService.propertyNames; let i = index">
+          <ng-container *ngIf="property != null">
+            <td>{{ property }}</td>
+            <td>
+              <terra-text-input inputName="{{ property }}"
+                                [(ngModel)]="property">
+              </terra-text-input>
+            </td>
+          </ng-container>
+        </tr>
+        </tbody>
+      </table>
+    </terra-portlet>
+  </div>
+</ng-template>

@@ -7,9 +7,8 @@ import {
     TerraDataTableRowInterface
 
 } from '@plentymarkets/terra-components';
-import { Observable } from 'rxjs/Observable';
 
-import { of } from 'rxjs';
+import {Observable, of} from 'rxjs';
 import { HistoryDataTableInterface } from '../interfaces/history-data-table.interface';
 
 export enum TerraDataTableSortOrderEnum

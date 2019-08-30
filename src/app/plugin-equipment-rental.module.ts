@@ -3,7 +3,6 @@ import {
     NgModule
 } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpModule } from '@angular/http';
 import {
     L10nLoader,
     TranslationModule
@@ -37,7 +36,6 @@ import { CreateItemComponent } from './views/create-item/create-item.component';
     imports:      [
         BrowserModule,
         BrowserAnimationsModule,
-        HttpModule,
         FormsModule,
         HttpClientModule,
         TranslationModule.forRoot(l10nConfig, { translationProvider: TranslationProvider }),
