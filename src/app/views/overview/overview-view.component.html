@@ -47,14 +47,16 @@
                 <div terra-card-footer>
                 </div>
             </terra-card>
-            <terra-card *ngFor="let article of _statsDataService.articles" inputImagePath="{{ article.image }}" (click)="onClickTerraCard(article.id)"  [tooltip]="article.available == 0 ? 'Dieses Gerät ist verliehen an '+article.user : ''" placement="bottom" [className]="article.available == 0 ? 'rent' : 'available'">
-                <div terra-card-header>
-                    <p>{{ article.name }}</p>
-                </div>
-                <div terra-card-footer>
-                    <p>&nbsp;</p>
-                </div>
-            </terra-card>
+            <div *ngIf="!isLoading">
+                <terra-card *ngFor="let article of _statsDataService.articles" inputImagePath="{{ article.image }}" (click)="onClickTerraCard(article.id)"  [tooltip]="article.available == 0 ? 'Dieses Gerät ist verliehen an '+article.user : ''" placement="bottom" [className]="article.available == 0 ? 'rent' : 'available'">
+                    <div terra-card-header>
+                        <p>{{ article.name }}</p>
+                    </div>
+                    <div terra-card-footer>
+                        <p>&nbsp;</p>
+                    </div>
+                </terra-card>
+            </div>
         </terra-portlet>
     </div>
     <div class="rightColumn" right>

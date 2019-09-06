@@ -662,6 +662,7 @@ export class OverviewViewComponent implements OnInit, OnDestroy
     {
         let categorys:Array<number> = JSON.parse(this._statsDataService.settings.get('categorys'));
         this._statsDataService.articlesResult = [];
+        let i = 0;
         for(let category of categorys)
         {
             // tslint:disable-next-line:max-line-length
@@ -701,7 +702,10 @@ export class OverviewViewComponent implements OnInit, OnDestroy
                             }
                         }
                     }
-                    this.isLoading = false;
+                    if(i === categorys.length-1){
+                        this.isLoading = false;
+                    }
+                    i++;
                 }, error =>
                 {
                     this._alert.error('Fehler beim Laden der Artikel');
