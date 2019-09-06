@@ -17,15 +17,12 @@ function isNullOrUndefined(object:any):boolean
 })
 export class CreateItemComponent implements OnInit {
   @ViewChildren('propertyInput') propertyInputs;
-  selectedFile: File;
 
   private name:string = "";
   private image:string = "";
   private category:string = "";
-  private base64Image:string = "";
   private propertyToggle:boolean = true;
   private isLoading:boolean = false;
-  public imagePath;
   imgURL: any;
 
   private _selectCategory:Array<TerraSelectBoxValueInterface> = [
@@ -172,45 +169,6 @@ export class CreateItemComponent implements OnInit {
             this._alert.error('Fehler beim Laden der Kategorien');
           }
       );
-    }
-  }
-
-  _handleReaderLoaded(readerEvt) {
-    var binaryString = readerEvt.target.result;
-    this.base64Image = btoa(binaryString);
-    console.log(btoa(binaryString));
-  }
-
-  onFileChanged(event) {
-    this.preview(event.target.files);
-    this.selectedFile = event.target.files[0];
-
-    if (event.target.files && event.target.files[0]) {
-      var reader = new FileReader();
-
-      reader.onload =this._handleReaderLoaded.bind(this);
-
-      reader.readAsBinaryString(event.target.files[0]);
-    }
-
-    console.log(this.selectedFile);
-  }
-
-  preview(files) {
-    if (files.length === 0)
-      return;
-
-    var mimeType = files[0].type;
-    if (mimeType.match(/image\/*/) == null) {
-      console.log("nicht unterstützt");
-      return;
-    }
-
-    var reader = new FileReader();
-    this.imagePath = files;
-    reader.readAsDataURL(files[0]);
-    reader.onload = (_event) => {
-      this.imgURL = reader.result;
     }
   }
 }
