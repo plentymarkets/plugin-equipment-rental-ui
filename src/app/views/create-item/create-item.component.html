@@ -27,17 +27,6 @@
               [(ngModel)]="image">
       </terra-file-input>
 
-      <input
-              style="display: none"
-              type="file" (change)="onFileChanged($event)"
-              #fileInput>
-      <terra-button (click)="fileInput.click()"
-                    inputCaption="Bild auswählen"
-                    inputIcon="icon-upload">
-      </terra-button>
-      <p *ngIf="this.selectedFile">{{ this.selectedFile.name }}</p>
-      <img [src]="imgURL" height="200" *ngIf="imgURL">
-
       <terra-select-box
               inputName="category"
               [inputListBoxValues]="_selectCategory"
@@ -48,13 +37,6 @@
       <div class="col-xs-12" style="padding-top:10px;padding-bottom:10px;">
         <terra-toggle [(ngModel)]="propertyToggle"></terra-toggle>
         Eigenschaften setzen
-      </div>
-      <div class="btn-group" role="group" *ngIf="propertyToggle">
-        <terra-button [inputIcon]="'icon-add'"
-                      [inputTooltipText]="'Add'"
-                      [inputTooltipPlacement]="'bottom'"
-                      (click)="addAttribute()">
-        </terra-button>
       </div>
 
       <table class="table table-striped" *ngIf="propertyToggle">
@@ -69,8 +51,8 @@
           <ng-container *ngIf="property != null">
             <td>{{ property }}</td>
             <td>
-              <terra-text-input inputName="{{ property }}"
-                                [(ngModel)]="property">
+              <terra-text-input #propertyInput inputName="{{ property }}"
+                                NgModel>
               </terra-text-input>
             </td>
           </ng-container>

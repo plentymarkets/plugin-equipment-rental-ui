@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, ViewChildren} from '@angular/core';
 import {OverviewDataService} from "../../services/overview-view.service";
 import {SettingsInterface} from "../../interfaces/settings.interface";
 import {AlertService, TerraSelectBoxValueInterface} from "@plentymarkets/terra-components";
 import {ArticleInterface} from "../../interfaces/article.interface";
+import {Router} from "@angular/router";
 
 function isNullOrUndefined(object:any):boolean
 {
@@ -15,6 +16,7 @@ function isNullOrUndefined(object:any):boolean
   styleUrls: ['./create-item.component.scss']
 })
 export class CreateItemComponent implements OnInit {
+  @ViewChildren('propertyInput') propertyInputs;
   selectedFile: File;
 
   private name:string = "";
@@ -34,7 +36,8 @@ export class CreateItemComponent implements OnInit {
   ];
   constructor(
       public _statsDataService:OverviewDataService,
-      private _alert:AlertService
+      private _alert:AlertService,
+      private router: Router,
   )
   { }
 
@@ -43,12 +46,39 @@ export class CreateItemComponent implements OnInit {
     this.loadCategorys();
   }
 
+  private getPropertyIdByName(name:string):number{
+    for (let [key, value] of Object.entries(this._statsDataService.propertyNames)) {
+      if(value == name){
+        return parseInt(key);
+      }
+    }
+    return 0;
+  }
+
   public createItem():void
   {
+    //inputName
+    //innerValue
+    let propertyPostData = [];
+    let property = {
+      id: 0,
+      name: ''
+    };
+    for(let input of this.propertyInputs.toArray()){
+      if (input.innerValue === undefined){
+        continue;
+      }
+      let property = {
+        id: this.getPropertyIdByName(input.inputName),
+        name: input.innerValue
+      };
+      propertyPostData.push(property);
+    }
     let itemData = {
         name: this.name,
         image: this.image, //this.image = terra overlay
         categoryId: this.category,
+        properties: propertyPostData
     };
 
     if(this.name.length <= 0)
@@ -63,20 +93,27 @@ export class CreateItemComponent implements OnInit {
       return;
     }
 
-    this._statsDataService.postRestCallData('plugin/equipmentRental/createItem', itemData).subscribe((response:any) =>
+    this._statsDataService.postRestCallData('plugin/equipmentRental/createItem', itemData).subscribe((article:any) =>
         {
-            console.log(response);
+          this._statsDataService.articlesResult.push(
+              {
+                id: article.id,
+                name: (article.name !== null) ? article.name : 'NONAME',
+                image: article.image,
+                category: parseInt(this.category),
+                attributes: article.variationAttributeValues,
+                properties: article.properties,
+                available: article.isAvailable,
+                user: article.user,
+                rent_until: article.rent_until
+              });
+
+          this.router.navigateByUrl('plugin/overview');
         }, error =>
         {
           this._alert.error('Fehler beim Anlegen des Gerätes');
         }
     );
-    console.log(itemData);
-  }
-
-  public addAttribute():void
-  {
-
   }
 
   public parseProperties():void
@@ -99,7 +136,7 @@ export class CreateItemComponent implements OnInit {
                     break;
                   }
                 }
-                this._statsDataService.propertyNames[property.position] = propertyName;
+                this._statsDataService.propertyNames[property.id] = propertyName;
               }
               this.parseProperties();
             }
