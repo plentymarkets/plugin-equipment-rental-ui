@@ -148,7 +148,7 @@ export class CreateItemComponent implements OnInit {
   }
 
   public loadCategorys():void{
-    //this.isLoading = true;
+    this.isLoading = true;
     if(Object.keys(this._statsDataService.categoryNames).length === 0)
     {
       this._statsDataService.getRestCallData('rest/categories').subscribe((response: any) => {
@@ -164,6 +164,7 @@ export class CreateItemComponent implements OnInit {
                   }
               );
             }
+            this.isLoading = false;
           }, error => {
             this.isLoading = false;
             this._alert.error('Fehler beim Laden der Kategorien');

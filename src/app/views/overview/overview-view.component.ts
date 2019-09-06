@@ -730,7 +730,7 @@ export class OverviewViewComponent implements OnInit, OnDestroy
             if(article.properties.length > 0){
                 for(let property of article.properties)
                 {
-                    if(!isNullOrUndefined(property.relationValues[0].value) && property.relationValues[0].value.length > 0)
+                    if(!isNullOrUndefined(property.relationValues[0]) && !isNullOrUndefined(property.relationValues[0].value) && property.relationValues[0].value.length > 0)
                     {
                         properties += this._statsDataService.propertyNames[property.propertyRelation.position]+': ';
                         properties += property.relationValues[0].value+'<br>';
