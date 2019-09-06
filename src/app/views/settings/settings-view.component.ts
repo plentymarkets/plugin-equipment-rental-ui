@@ -64,7 +64,7 @@ export class SettingsViewComponent
                 });
                 this.getCategorys();
             }, error => {
-                console.log("error while loading settings");
+                this._alert.error('error while loading settings data');
                 this.isLoading = false;
             }
         );

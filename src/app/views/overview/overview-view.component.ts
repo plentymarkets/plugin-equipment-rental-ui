@@ -136,7 +136,6 @@ export class OverviewViewComponent implements OnInit, OnDestroy
         this.loadPage(1);
         this._routerSub = this.router.events.subscribe((val) => {
             if (val instanceof NavigationStart) {
-                console.log(val.url);
                 if (val.url.indexOf('/overview/') != -1) {
                     let splitUrl = val.url.split('/');
                     let deviceId = parseInt(splitUrl[splitUrl.length - 1]);
@@ -150,9 +149,7 @@ export class OverviewViewComponent implements OnInit, OnDestroy
         if (!isNullOrUndefined(this.route.snapshot.paramMap.get("deviceId")) && this.route.snapshot.paramMap.get("deviceId").length > 0) {
             this.loadArticleRoute(parseInt(this.route.snapshot.paramMap.get("deviceId")));
         }
-        console.log(this._statsDataService.categoryNames);
         if (this._statsDataService.categoryNames.size === 0) {
-            console.log("lade kategorien");
             this.loadCategorys();
             this.loadPropertyNames();
         }
@@ -160,7 +157,6 @@ export class OverviewViewComponent implements OnInit, OnDestroy
 
     private loadArticleRoute(deviceId:number):void
     {
-        console.log("loadArticleRoute");
         this._statsDataService._actualArticleId = deviceId;
         this.setActualArticleKeyById(deviceId);
         this.loadPage(2);
@@ -444,7 +440,6 @@ export class OverviewViewComponent implements OnInit, OnDestroy
 
     private loadRentInformation(id:number,loadBreadcrumb:boolean = false):void
     {
-        console.log("load rent information");
         this.showHistory(id);
         let arrayKey:any;
         for (let i in this._statsDataService.articlesRentInformation) {
@@ -753,7 +748,6 @@ export class OverviewViewComponent implements OnInit, OnDestroy
                 rent_until:rent_until,
                 properties: properties,
             };
-            console.log(JSON.stringify(newArticle));
             data.push(newArticle);
         }
         const replacer = (key, value) => value === null ? '' : value; // specify how you want to handle null values here

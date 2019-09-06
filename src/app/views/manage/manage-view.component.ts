@@ -116,7 +116,7 @@ export class ManageViewComponent
                 this.isLoading = false;
             }, error =>
             {
-                console.log('error while loading history data');
+                this._alert.error('error while loading history data');
             }
         );
 
