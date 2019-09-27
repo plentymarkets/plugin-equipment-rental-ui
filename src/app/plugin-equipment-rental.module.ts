@@ -31,6 +31,7 @@ import { SettingsViewComponent } from './views/settings/settings-view.component'
 import { TooltipModule } from 'ngx-bootstrap';
 import { OverviewDataService } from './services/overview-view.service';
 import { CreateItemComponent } from './views/create-item/create-item.component';
+import { MatSelectModule } from '@angular/material';
 
 @NgModule({
     imports:      [
@@ -42,7 +43,8 @@ import { CreateItemComponent } from './views/create-item/create-item.component';
         RouterModule.forRoot([]),
         TerraComponentsModule,
         TooltipModule.forRoot(),
-        routing
+        routing,
+        MatSelectModule
     ],
     declarations: [
         PluginEquipmentRentalComponent,

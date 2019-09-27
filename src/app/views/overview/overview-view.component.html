@@ -6,21 +6,30 @@
             (outputOnEnterSubmit)="onSubmit()">
             <terra-text-input inputName="Name" [(ngModel)]="_name">
             </terra-text-input>
-            <terra-select-box
-                    inputName="Verfügbarkeit"
-                    [inputListBoxValues]="_selectAvailable"
-                    [(ngModel)]="availableFilter">
-            </terra-select-box>
-            <terra-select-box
-                    inputName="Kategorie"
-                    [inputListBoxValues]="_statsDataService._selectCategory"
-                    [(ngModel)]="categoryFilter">
-            </terra-select-box>
-            <terra-select-box
-                    inputName="Benutzer"
-                    [inputListBoxValues]="_statsDataService._selectUser"
-                    [(ngModel)]="userFilter">
-            </terra-select-box>
+            <mat-form-field class="w-100">
+                <mat-label>Verfügbarkeit</mat-label>
+                <mat-select [(ngModel)]="availableFilter">
+                    <mat-option *ngFor="let available of _selectAvailable" [value]="available.value">
+                        {{available.caption}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field class="w-100">
+                <mat-label>Kategorie</mat-label>
+                <mat-select [(ngModel)]="categoryFilter">
+                    <mat-option *ngFor="let category of _statsDataService._selectCategory" [value]="category.value">
+                        {{category.caption}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field class="w-100">
+                <mat-label>Benutzer</mat-label>
+                <mat-select [(ngModel)]="userFilter">
+                    <mat-option *ngFor="let user of _statsDataService._selectUser" [value]="user.value">
+                        {{user.caption}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
         </terra-filter>
     </div>
 
