@@ -32,12 +32,18 @@ export class OverviewDataService
             caption: 'Alle'
         }
     ];
+    public _selectCategory:Array<TerraSelectBoxValueInterface> = [
+        {
+            value: 0,
+            caption: 'Alle'
+        }
+    ];
 
     constructor(private http:HttpClient)
     {
         if(!environment.production)
         {
-            this.token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImE0ODM3OTkzNGE4NzhiYmQyYWQ0NDU1ZDFiNTMxNzUyODA5YTExNTIzNTRiMTI2MTZlNDE1OTFjNGM0YjE2Y2VkNWQ0MjM0M2JmNGU2MjliIn0.eyJhdWQiOiIxIiwianRpIjoiYTQ4Mzc5OTM0YTg3OGJiZDJhZDQ0NTVkMWI1MzE3NTI4MDlhMTE1MjM1NGIxMjYxNmU0MTU5MWM0YzRiMTZjZWQ1ZDQyMzQzYmY0ZTYyOWIiLCJpYXQiOjE1NjcxNDU2NTgsIm5iZiI6MTU2NzE0NTY1OCwiZXhwIjoxNTY3MjMyMDU3LCJzdWIiOiIzIiwic2NvcGVzIjpbIioiXX0.CC0q7GtxnsNJCQs9jvU6VW-9_F-9f_f-5i3eWKRSMvDZW6hN7tPRkfiiWS8TwKZZKPGRxAZk-omN4EUbMY5WmUZlUxgbwbjrgKV1KwRV29MZOz-mv74QU3s0wrFAaGFpRP8FOobU5mO71f7foX3s44B-Wn1PBee7RJ0Xd71tsQvD26dkzaxUhsEarNBvs8JvdvTYjtLiEdyixM3kgBY3gvviamZjQKewmm5gmxX-9QJEwoN6HD8z4VdaRw74AcbcAiCF0kGTsTMI9XolQYsO8LsfSH7y1wuZjJ725fQoRss-HsKygL2hyjAkQKpp87NeZEmVG2F6T0BCHSZCX4DGKiZ_laRZUl6sNJ-5aJB0OL288FMKUa5KIydhWcfGQsHecu0mMswixvbUZIoJOVIns2oCZt1QOlEfGTIvmvLlSiQDytcKRVu62tx32Uu-MOlmKChcV2A6dgIkK85e_nP9wcQpnOdEmLShPVQ9P-xX1tWA3Bo34W4Qofk4-15WVHN5fB7MZeZWwmYBk5q33t_lO7cXgpNLVY7qU8Cbs6Ze9ztCAe34STrgCCkCM3uljeY7vKDSgoJ8h6h15vR8CSgxzZWzf0jM9Hbxqo-s2tIfVcrRQlieobP86W5XLe5L_3RQnpcSIpo0_7m_eWQ3F866rCoupgWvBc8fvV7KQnIraW8';
+            this.token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6IjViYzM2N2FkZjQ0YTZjNGQ2NGE4YTE5ZTNjMGQ5YzA5NGM1NGY5MmY1ZGIyZmRiMmRhNzQyMDMwNTAwODIzN2YxZmEwZDMxOTQ3ZTVlNTEzIn0.eyJhdWQiOiIxIiwianRpIjoiNWJjMzY3YWRmNDRhNmM0ZDY0YThhMTllM2MwZDljMDk0YzU0ZjkyZjVkYjJmZGIyZGE3NDIwMzA1MDA4MjM3ZjFmYTBkMzE5NDdlNWU1MTMiLCJpYXQiOjE1Njk1NjQ2MDIsIm5iZiI6MTU2OTU2NDYwMiwiZXhwIjoxNTY5NjUxMDAyLCJzdWIiOiIzIiwic2NvcGVzIjpbIioiXX0.kR52L2YmtmRP5fro7IFnawUFB93kYRTF8r4iUuoghDqbGK9FwGmZEtzyCGhWHtGkdZqYm20MhecnLanmZ5NZbqHEMRDXVGyJ6BqghKqqyRcNg4g4JU5MqpZfyMg14D20CKNpvnk8AlAIJOtLXGDl8bPjhyA3bHreKPTJkFOgZND7jtC2_5lV9fgC_2zbVkY75rtQaBBhebibSKipT9XVzb1UtVyKB-6ytfiJWqArF_LPChS-IpEKahN0swNHKQ2MscvclgSD6QnZGcu3U_7Y0iElYMTZ4BmdEj7AMUoBcdE69PZDBKcvcNIABTFqtbn1k8bJabs6DjmqlSq985mDBYXhYqCasNnBmPnFoN4bwLBlmWf-m0vuZipHDsNeinlgPqp-BhXwBTurpVxGfSea4ykoqj8QEoNN1dl7FDlVu0uEBnJVA9htTUww2HpK9tljLQKaALbXWQqimkzoOIIL_RC2DwaTLmN_y_3Mgo4fhAQo7NPBkqhsQWaZdJQA3GRaZ0J1kZBjFUKeneR8zslIoFxDWh2tDsHoOc7NcL-uv55CySV_Kgdt94o-c9rqZ5JhxfjfTeZswSe_4_enuvb0MyUrSL6AIvzequOud007_RDkSUqgIY84Wn6RJhxSTPi_vrdTPIuKt8J6IYmBRV7MapZWE9gKBX6hwjnQ15KV0d0';
             this.url = 'http://master.login.plentymarkets.com' + this.url;
             localStorage.setItem('accessToken', this.token);
         }

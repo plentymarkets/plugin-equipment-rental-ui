@@ -105,7 +105,7 @@ export class CreateItemComponent implements OnInit {
                 rent_until: article.rent_until
               });
           this._alert.success('Das Gerät wurde erfolgreich angelegt');
-          this.router.navigateByUrl('plugin/overview');
+          this.router.navigateByUrl('plugin/overview/'+article.id);
         }, error =>
         {
           this._alert.error('Fehler beim Anlegen des Gerätes');

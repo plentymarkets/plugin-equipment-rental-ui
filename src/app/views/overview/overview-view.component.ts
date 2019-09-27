@@ -17,7 +17,7 @@ import { RouterViewComponent } from "../router/router-view.component";
 import { RentInterface } from '../../interfaces/rent.interface';
 import { UserInterface } from '../../interfaces/user.interface';
 import { SettingsInterface } from '../../interfaces/settings.interface';
-import {OverviewDataService} from "../../services/overview-view.service";
+import { OverviewDataService } from "../../services/overview-view.service";
 
 
 function isNullOrUndefined(object:any):boolean
@@ -242,7 +242,7 @@ export class OverviewViewComponent implements OnInit, OnDestroy
                     let categorys:Array<number> = JSON.parse(this._statsDataService.settings.get('categorys'));
                     for(let id of categorys)
                     {
-                        this._selectCategory.push(
+                        this._statsDataService._selectCategory.push(
                             {
                                 value:  id,
                                 caption: this._statsDataService.categoryNames.get(id)
