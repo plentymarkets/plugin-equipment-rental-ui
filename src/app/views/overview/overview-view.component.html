@@ -139,11 +139,14 @@
                         <terra-portlet>
                             <h2>Artikel zurückgeben</h2>
                             <terra-text-input inputName="Bemerkung" [(ngModel)]="giveBackComment"></terra-text-input>
-                            <terra-select-box
-                                    inputName="Status"
-                                    [inputListBoxValues]="_selectStatus"
-                                    [(ngModel)]="statusOption">
-                            </terra-select-box>
+                            <mat-form-field class="w-100">
+                                <mat-label>Kategorie</mat-label>
+                                <mat-select [(ngModel)]="statusOption">
+                                    <mat-option *ngFor="let status of _selectStatus" [value]="status.value">
+                                        {{status.caption}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
                         </terra-portlet>
                         <terra-portlet>
                             <div *ngIf="_statsDataService._actualArticleData.user">

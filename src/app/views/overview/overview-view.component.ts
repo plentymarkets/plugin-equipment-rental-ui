@@ -50,10 +50,10 @@ export class OverviewViewComponent implements OnInit, OnDestroy
     public comment:string = '';
     public giveBackComment:string = '';
 
-    public availableFilter:string = '';
+    public availableFilter:any = -1;
 
-    public categoryFilter:string = '';
-    public userFilter:string = '';
+    public categoryFilter:any = 0;
+    public userFilter:any = 0;
 
     public statusOption:string = '';
     public _actualArticleData:RentInterface;
@@ -393,8 +393,9 @@ export class OverviewViewComponent implements OnInit, OnDestroy
     private onResetBtnClicked():void
     {
         this._name = '';
-        this.availableFilter = '-1';
-        this.categoryFilter = '0';
+        this.availableFilter = -1;
+        this.categoryFilter = 0;
+        this.userFilter = 0;
         this.updateData();
     }
 

@@ -27,12 +27,14 @@
               [(ngModel)]="image">
       </terra-file-input>
 
-      <terra-select-box
-              inputName="Kategorie"
-              [inputListBoxValues]="_selectCategory"
-              [(ngModel)]="category">
-      </terra-select-box>
-
+      <mat-form-field class="w-100">
+        <mat-label>Kategorie</mat-label>
+        <mat-select [(ngModel)]="category">
+          <mat-option *ngFor="let category of _selectCategory" [value]="category.value">
+            {{category.caption}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
 
       <div class="col-xs-12" style="padding-top:10px;padding-bottom:10px;">
         <terra-toggle [(ngModel)]="propertyToggle"></terra-toggle>
