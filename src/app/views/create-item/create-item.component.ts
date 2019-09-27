@@ -104,7 +104,7 @@ export class CreateItemComponent implements OnInit {
                 user: article.user,
                 rent_until: article.rent_until
               });
-
+          this._alert.success('Das Gerät wurde erfolgreich angelegt');
           this.router.navigateByUrl('plugin/overview');
         }, error =>
         {
