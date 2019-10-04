@@ -195,7 +195,6 @@
                             <tbody>
                             <tr [tcTableRow]="row" hasContextMenu [rowData]="row.data" *ngFor="let row of _historyService.rowList; let index = index">
                                 <td>{{ row.data.user }}</td>
-                                <td>{{ row.data.adminUser }}</td>
                                 <td>{{ row.data.comment }}</td>
                                 <td>{{ row.data.getBackComment }}</td>
                                 <td>{{ row.data.created_at }}</td>

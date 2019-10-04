@@ -272,12 +272,6 @@ export class OverviewViewComponent implements OnInit, OnDestroy
                 width:   10
             },
             {
-                caption:   'Rückgabe an',
-                sortBy:    'adminUser',
-                width:     10,
-                textAlign: TerraTextAlignEnum.LEFT
-            },
-            {
                 caption:   'Kommentar',
                 sortBy:    'comment',
                 width:     10,
