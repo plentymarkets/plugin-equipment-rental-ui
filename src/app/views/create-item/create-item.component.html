@@ -12,12 +12,11 @@
     <div class="btn-group" role="group">
       <terra-button [inputIcon]="'icon-save'"
                     [inputTooltipText]="'Save'"
-                    [inputTooltipPlacement]="'bottom'"
                     (click)="createItem()">
       </terra-button>
     </div>
   </terra-base-toolbar>
-  <div class="col-md-6">
+  <div class="col-xl-6">
     <terra-portlet inputPortletHeader="Artikel anlegen">
       <terra-text-input inputName="Artikelname"
                         [(ngModel)]="name">
@@ -36,7 +35,7 @@
         </mat-select>
       </mat-form-field>
 
-      <div class="col-xs-12" style="padding-top:10px;padding-bottom:10px;">
+      <div class="col-12" style="padding-top:10px;padding-bottom:10px;">
         <terra-toggle [(ngModel)]="propertyToggle"></terra-toggle>
         Eigenschaften setzen
       </div>

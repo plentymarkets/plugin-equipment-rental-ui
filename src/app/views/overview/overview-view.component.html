@@ -8,7 +8,7 @@
             </terra-text-input>
             <mat-form-field class="w-100">
                 <mat-label>Verfügbarkeit</mat-label>
-                <mat-select [(ngModel)]="availableFilter">
+                <mat-select [(ngModel)]="availableFilter" [disabled]="isLoading">
                     <mat-option *ngFor="let available of _selectAvailable" [value]="available.value">
                         {{available.caption}}
                     </mat-option>
@@ -16,7 +16,7 @@
             </mat-form-field>
             <mat-form-field class="w-100">
                 <mat-label>Kategorie</mat-label>
-                <mat-select [(ngModel)]="categoryFilter">
+                <mat-select [(ngModel)]="categoryFilter" [disabled]="isLoading">
                     <mat-option *ngFor="let category of _statsDataService._selectCategory" [value]="category.value">
                         {{category.caption}}
                     </mat-option>
@@ -24,7 +24,7 @@
             </mat-form-field>
             <mat-form-field class="w-100">
                 <mat-label>Benutzer</mat-label>
-                <mat-select [(ngModel)]="userFilter">
+                <mat-select [(ngModel)]="userFilter" [disabled]="isLoading">
                     <mat-option *ngFor="let user of _statsDataService._selectUser" [value]="user.value">
                         {{user.caption}}
                     </mat-option>
@@ -38,7 +38,7 @@
             <div class="btn-group" role="group">
                 <terra-button inputIcon='icon-export'
                               [inputTooltipText]="'CSV Exportieren'"
-                              [inputTooltipPlacement]="'bottom'"
+                              [inputIsDisabled]="isLoading || !_statsDataService.articles || _statsDataService.articles.length === 0"
                               (click)="exportCSV()"
                 >
                 </terra-button><br/>
@@ -49,15 +49,16 @@
                 <terra-loading-spinner></terra-loading-spinner>
                 Loading...
             </div>
-            <terra-card *ngIf="!isLoading" [tooltip]="'Neuen Artikel anlegen'" placement="bottom" style="float:left;" inputPlaceholderIcon="icon-add" (click)="loadCreateItem()">
+            <terra-card *ngIf="!isLoading" [tooltip]="'Neuen Artikel anlegen'" style="float:left;" inputPlaceholderIcon="icon-add" (click)="loadCreateItem()">
                 <div terra-card-header>
                     <p>Neuen Artikel anlegen</p>
                 </div>
                 <div terra-card-footer>
                 </div>
             </terra-card>
+            <div *ngIf="_statsDataService.articles && _statsDataService.articles.length === 0" style="clear:both"></div>
             <div *ngIf="!isLoading">
-                <terra-card *ngFor="let article of _statsDataService.articles" inputImagePath="{{ article.image }}" (click)="onClickTerraCard(article.id)"  [tooltip]="article.available == 0 ? 'Dieses Gerät ist verliehen an '+article.user : ''" placement="bottom" [className]="article.available == 0 ? 'rent' : 'available'">
+                <terra-card *ngFor="let article of _statsDataService.articles" inputImagePath="{{ article.image }}" (click)="onClickTerraCard(article.id)"  [tooltip]="article.available == 0 ? 'Dieses Gerät ist verliehen an '+article.user : ''"  [className]="article.available == 0 ? 'rent' : 'available'">
                     <div terra-card-header>
                         <p>{{ article.name }}</p>
                     </div>
@@ -76,13 +77,11 @@
                         <div class="btn-group" role="group">
                             <terra-button *ngIf="!_statsDataService._actualArticleIsRent && !isLoading" inputIcon='icon-save'
                                 [inputTooltipText]="'Verleihen'"
-                                [inputTooltipPlacement]="'bottom'"
                                 (click)="rentItem(_statsDataService._actualArticleKey)"
                             >
                             </terra-button>
                             <terra-button *ngIf="_statsDataService._actualArticleIsRent && !isLoading" inputIcon='icon-save'
                                           [inputTooltipText]="'Zurückgeben'"
-                                          [inputTooltipPlacement]="'bottom'"
                                           (click)="giveBack(_statsDataService._actualArticleId)"
                             >
                             </terra-button>
