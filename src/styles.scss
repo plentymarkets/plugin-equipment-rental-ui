@@ -59,3 +59,28 @@
         margin:0px auto !important;
     }
 }
+.red{
+    color:red !important;
+}
+.yellow{
+    color:orange !important;
+}
+.popupTable{
+    max-width:350px !important;
+    background: var(--color-structure-0);
+    position:absolute;
+    z-index:999;
+    max-height: 200px;
+    overflow-y: auto;
+    margin: 0;
+    padding: 0;
+    box-shadow: var(--box-shadow);
+    tbody{
+        tr:hover{
+            background:var(--color-structure-3) !important;
+        }
+    }
+}
+.group-function-body{
+    display:none;
+}
