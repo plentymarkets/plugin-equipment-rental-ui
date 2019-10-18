@@ -49,7 +49,7 @@
                 <terra-loading-spinner></terra-loading-spinner>
                 Loading...
             </div>
-            <terra-card *ngIf="!isLoading" [tooltip]="'Neuen Artikel anlegen'" style="float:left;" inputPlaceholderIcon="icon-add" (click)="loadCreateItem()">
+            <terra-card *ngIf="!isLoading" tcTooltip="Neuen Artikel anlegen" style="float:left;" inputPlaceholderIcon="icon-add" (click)="loadCreateItem()">
                 <div terra-card-header>
                     <p>Neuen Artikel anlegen</p>
                 </div>
@@ -58,7 +58,7 @@
             </terra-card>
             <div *ngIf="_statsDataService.articles && _statsDataService.articles.length === 0" style="clear:both"></div>
             <div *ngIf="!isLoading">
-                <terra-card *ngFor="let article of _statsDataService.articles" inputImagePath="{{ article.image }}" (click)="onClickTerraCard(article.id)"  [tooltip]="article.available == 0 ? 'Dieses Gerät ist verliehen an '+article.user : ''"  [className]="article.available == 0 ? 'rent' : 'available'">
+                <terra-card *ngFor="let article of _statsDataService.articles" inputImagePath="{{ article.image }}" (click)="onClickTerraCard(article.id)"  [tcTooltip]="article.available == 0 ? 'Dieses Gerät ist verliehen an '+article.user : ''"  [className]="article.available == 0 ? 'rent' : 'available'">
                     <div terra-card-header>
                         <p>{{ article.name }}</p>
                     </div>

@@ -18,7 +18,7 @@ import {
 import {
     httpInterceptorProviders,
     TerraComponentsModule,
-    TerraNodeTreeConfig
+    TerraNodeTreeConfig, TooltipDirective
 } from '@plentymarkets/terra-components';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslationProvider } from './core/localization/translation-provider';
@@ -28,7 +28,6 @@ import { RouterViewComponent } from './views/router/router-view.component';
 import { OverviewViewComponent } from './views/overview/overview-view.component';
 import { ManageViewComponent } from './views/manage/manage-view.component';
 import { SettingsViewComponent } from './views/settings/settings-view.component';
-import { TooltipModule } from 'ngx-bootstrap';
 import { OverviewDataService } from './services/overview-view.service';
 import { CreateItemComponent } from './views/create-item/create-item.component';
 import { MatSelectModule } from '@angular/material';
@@ -42,7 +41,6 @@ import { MatSelectModule } from '@angular/material';
         TranslationModule.forRoot(l10nConfig, { translationProvider: TranslationProvider }),
         RouterModule.forRoot([]),
         TerraComponentsModule,
-        TooltipModule.forRoot(),
         routing,
         MatSelectModule
     ],
@@ -65,7 +63,8 @@ import { MatSelectModule } from '@angular/material';
         appRoutingProviders,
         TerraNodeTreeConfig,
         PlaceHolderService,
-        OverviewDataService
+        OverviewDataService,
+        TooltipDirective
     ],
     bootstrap:    [
         PluginEquipmentRentalComponent

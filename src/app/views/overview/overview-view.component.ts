@@ -450,7 +450,7 @@ export class OverviewViewComponent implements OnInit, OnDestroy
                 this.isLoading = true;
                 this._statsDataService.getRestCallData('plugin/equipmentRental/rentalDevice/' + id).subscribe((response:any) =>
                     {
-                        if(Object.keys(response).length > 0)
+                        if(Object.keys(response) && Object.keys(response).length > 0)
                         {
                             response.isAvailable = parseInt(response.isAvailable);
                             this._statsDataService.articlesRentInformation.push(
