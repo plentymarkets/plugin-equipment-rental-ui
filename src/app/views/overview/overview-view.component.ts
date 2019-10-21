@@ -54,6 +54,7 @@ export class OverviewViewComponent implements OnInit, OnDestroy
 
     public categoryFilter:any = 0;
     public userFilter:any = 0;
+    public statusFilter:any = 0;
 
     public statusOption:string = '';
     public _actualArticleData:RentInterface;
@@ -75,6 +76,8 @@ export class OverviewViewComponent implements OnInit, OnDestroy
             caption: 'Verfügbar'
         }
     ];
+
+
     private _selectCategory:Array<TerraSelectBoxValueInterface> = [
         {
             value: 0,
@@ -85,6 +88,25 @@ export class OverviewViewComponent implements OnInit, OnDestroy
         {
             value: 0,
             caption: 'Alle'
+        }
+    ];
+
+    private _selectStatusFilter:Array<TerraSelectBoxValueInterface> = [
+        {
+            value: 0,
+            caption: 'Alle'
+        },
+        {
+            value: 1,
+            caption: 'Defekt'
+        },
+        {
+            value: 2,
+            caption: 'Entwendet'
+        },
+        {
+            value: 3,
+            caption: 'Verloren'
         }
     ];
     private _selectStatus:Array<TerraSelectBoxValueInterface> = [
@@ -390,6 +412,7 @@ export class OverviewViewComponent implements OnInit, OnDestroy
         this.availableFilter = -1;
         this.categoryFilter = 0;
         this.userFilter = 0;
+        this.statusFilter = 0;
         this.updateData();
     }
 
@@ -651,6 +674,14 @@ export class OverviewViewComponent implements OnInit, OnDestroy
                 article => article.user == this.userFilter
             );
         }
+
+        //Status filter
+        if(this.statusFilter != '0')
+        {
+            this._statsDataService.articles = this._statsDataService.articles.filter(
+                article => article.status == this.statusFilter
+            );
+        }
     }
 
     private createArticleData():void
@@ -676,7 +707,8 @@ export class OverviewViewComponent implements OnInit, OnDestroy
                                 properties: article.properties,
                                 available: article.isAvailable,
                                 user: article.user,
-                                rent_until: article.rent_until
+                                rent_until: article.rent_until,
+                                status: parseInt(article.status)
                             });
 
                         if(article.isAvailable == 0){

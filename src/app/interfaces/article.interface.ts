@@ -10,4 +10,5 @@ export interface ArticleInterface
     available?:number;
     user?:string;
     rent_until?:number;
+    status?:number;
 }
