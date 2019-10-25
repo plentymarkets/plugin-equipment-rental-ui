@@ -71,7 +71,7 @@
                         <p>{{ article.name }}</p>
                     </div>
                     <div terra-card-footer>
-                        <p>&nbsp;</p>
+                        <p>&nbsp;<ng-template [ngIf]="article.status > 0">{{ this._selectStatus[article.status].caption }}</ng-template> </p>
                     </div>
                 </terra-card>
             </div>

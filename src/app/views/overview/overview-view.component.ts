@@ -859,6 +859,12 @@ export class OverviewViewComponent implements OnInit, OnDestroy
         return str.charAt(0).toUpperCase() + str.slice(1);
     }
 
+    /**
+     * Returns tooltip string for the terra card of an item
+     *
+     * @param article
+     * @return string
+     */
     private getCardTooltip(article:ArticleInterface):string{
         if(article.status > 0){
             return 'Nicht verfügbar: '+this._selectStatus[article.status].caption;
@@ -870,11 +876,9 @@ export class OverviewViewComponent implements OnInit, OnDestroy
      * Returns classes for the terra card of an item
      *
      * @param article
+     * @return string
      */
     private getCardClasses(article:ArticleInterface):string{
-        if(article.status > 0){
-            return 'device-unavailable';
-        }
         return article.available == 0 ? 'rent' : 'available';
     }
 }
