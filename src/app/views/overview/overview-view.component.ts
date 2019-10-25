@@ -775,7 +775,6 @@ export class OverviewViewComponent implements OnInit, OnDestroy
                 name:article.name,
                 category:this._statsDataService.categoryNames.get(article.category),
                 user:article.user,
-                image:article.image,
                 available:article.available === 1 ? "Verfügbar" : "Ausgeliehen",
                 rent_until:rent_until,
                 properties: properties,
