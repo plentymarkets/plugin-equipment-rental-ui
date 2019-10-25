@@ -84,3 +84,17 @@
 .group-function-body{
     display:none;
 }
+.device-unavailable .card{
+    position: relative;
+}
+.device-unavailable .card:after{
+    content: " ";
+    z-index: 10;
+    display: block;
+    position: absolute;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: rgba(47, 50, 58,0.4);
+}

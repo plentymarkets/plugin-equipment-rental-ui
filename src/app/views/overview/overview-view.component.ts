@@ -18,6 +18,7 @@ import { RentInterface } from '../../interfaces/rent.interface';
 import { UserInterface } from '../../interfaces/user.interface';
 import { SettingsInterface } from '../../interfaces/settings.interface';
 import { OverviewDataService } from "../../services/overview-view.service";
+import {ArticleInterface} from "../../interfaces/article.interface";
 
 
 function isNullOrUndefined(object:any):boolean
@@ -37,7 +38,6 @@ export class OverviewViewComponent implements OnInit, OnDestroy
     public isLoading:boolean = false;
 
     public settings:Map<string, any> = new Map<string, any>();
-    public propertyNames:Array<string> = [];
     public findUserResult:Array<any> = [];
     public autofillLoading:boolean = false;
 
@@ -577,6 +577,7 @@ export class OverviewViewComponent implements OnInit, OnDestroy
                 }
                 this.refreshHistory(deviceId);
                 this._statsDataService.articlesResult[this._statsDataService._actualArticleKey].available = 1;
+                this._statsDataService.articlesResult[this._statsDataService._actualArticleKey].status = data.status;
                 this._statsDataService.articlesResult[this._statsDataService._actualArticleKey].user = '';
                 this.email = '';
                 this.date = '';
@@ -856,5 +857,24 @@ export class OverviewViewComponent implements OnInit, OnDestroy
     public capitalize(str:string):string
     {
         return str.charAt(0).toUpperCase() + str.slice(1);
+    }
+
+    private getCardTooltip(article:ArticleInterface):string{
+        if(article.status > 0){
+            return 'Nicht verfügbar: '+this._selectStatus[article.status].caption;
+        }
+        return  article.available == 0 ? 'Dieses Gerät ist verliehen an '+article.user : '';
+    }
+
+    /**
+     * Returns classes for the terra card of an item
+     *
+     * @param article
+     */
+    private getCardClasses(article:ArticleInterface):string{
+        if(article.status > 0){
+            return 'device-unavailable';
+        }
+        return article.available == 0 ? 'rent' : 'available';
     }
 }

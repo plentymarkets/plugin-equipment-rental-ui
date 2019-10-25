@@ -57,7 +57,7 @@
                 <terra-loading-spinner></terra-loading-spinner>
                 Loading...
             </div>
-            <terra-card *ngIf="!isLoading" tcTooltip="Neuen Artikel anlegen" style="float:left;" inputPlaceholderIcon="icon-add" (click)="loadCreateItem()">
+            <terra-card *ngIf="!isLoading && this._statsDataService.settings && this._statsDataService.settings.size > 0" tcTooltip="Neuen Artikel anlegen" style="float:left;" inputPlaceholderIcon="icon-add" (click)="loadCreateItem()">
                 <div terra-card-header>
                     <p>Neuen Artikel anlegen</p>
                 </div>
@@ -66,7 +66,7 @@
             </terra-card>
             <div *ngIf="_statsDataService.articles && _statsDataService.articles.length === 0" style="clear:both"></div>
             <div *ngIf="!isLoading">
-                <terra-card *ngFor="let article of _statsDataService.articles" inputImagePath="{{ article.image }}" (click)="onClickTerraCard(article.id)"  [tcTooltip]="article.available == 0 ? 'Dieses Gerät ist verliehen an '+article.user : ''"  [className]="article.available == 0 ? 'rent' : 'available'">
+                <terra-card *ngFor="let article of _statsDataService.articles" inputImagePath="{{ article.image }}" (click)="onClickTerraCard(article.id)"  [tcTooltip]="getCardTooltip(article)"  [className]="getCardClasses(article)">
                     <div terra-card-header>
                         <p>{{ article.name }}</p>
                     </div>
@@ -147,7 +147,7 @@
                             <h2>Artikel zurückgeben</h2>
                             <terra-text-input inputName="Bemerkung" [(ngModel)]="giveBackComment"></terra-text-input>
                             <mat-form-field class="w-100">
-                                <mat-label>Kategorie</mat-label>
+                                <mat-label>Status</mat-label>
                                 <mat-select [(ngModel)]="statusOption">
                                     <mat-option *ngFor="let status of _selectStatus" [value]="status.value">
                                         {{status.caption}}
