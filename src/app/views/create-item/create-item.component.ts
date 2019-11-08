@@ -4,6 +4,7 @@ import {SettingsInterface} from "../../interfaces/settings.interface";
 import {AlertService, TerraSelectBoxValueInterface} from "@plentymarkets/terra-components";
 import {ArticleInterface} from "../../interfaces/article.interface";
 import {Router} from "@angular/router";
+import {FormControl, FormGroup, Validators} from "@angular/forms";
 
 function isNullOrUndefined(object:any):boolean
 {
@@ -16,6 +17,7 @@ function isNullOrUndefined(object:any):boolean
   styleUrls: ['./create-item.component.scss']
 })
 export class CreateItemComponent implements OnInit {
+  public createItemForm: FormGroup;
   @ViewChildren('propertyInput') propertyInputs;
 
   private name:string = "";
@@ -26,10 +28,6 @@ export class CreateItemComponent implements OnInit {
   imgURL: any;
 
   private _selectCategory:Array<TerraSelectBoxValueInterface> = [
-    {
-      value: 0,
-      caption: 'Bitte Auswählen'
-    }
   ];
   constructor(
       public _statsDataService:OverviewDataService,
@@ -39,9 +37,17 @@ export class CreateItemComponent implements OnInit {
   { }
 
   ngOnInit() {
+      this.createItemForm = new FormGroup({
+          name: new FormControl( '',[Validators.required]),
+          category: new FormControl( '',[Validators.required])
+      });
     this.loadPropertyNames();
     this.loadCategorys();
   }
+
+    public hasError = (controlName: string, errorName: string) =>{
+        return this.createItemForm.controls[controlName].hasError(errorName);
+    }
 
   private getPropertyIdByName(name:string):number{
     for (let [key, value] of Object.entries(this._statsDataService.propertyNames)) {
@@ -54,8 +60,15 @@ export class CreateItemComponent implements OnInit {
 
   public createItem():void
   {
-    //inputName
-    //innerValue
+    if(this.createItemForm.status == "INVALID"){
+        this.createItemForm.get('name').markAsTouched();
+        this.createItemForm.get('category').markAsTouched();
+        return;
+    }
+
+    this.name = this.createItemForm.get('name').value;
+    this.category = this.createItemForm.get('category').value;
+
     let propertyPostData = [];
     let property = {
       id: 0,

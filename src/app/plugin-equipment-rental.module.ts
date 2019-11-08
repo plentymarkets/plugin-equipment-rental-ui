@@ -7,7 +7,7 @@ import {
     L10nLoader,
     TranslationModule
 } from 'angular-l10n';
-import { FormsModule } from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { l10nConfig } from './core/localization/l10n.config';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
@@ -44,7 +44,8 @@ import {MatInputModule} from "@angular/material/input";
         TerraComponentsModule,
         routing,
         MatSelectModule,
-        MatInputModule
+        MatInputModule,
+        ReactiveFormsModule
     ],
     declarations: [
         PluginEquipmentRentalComponent,

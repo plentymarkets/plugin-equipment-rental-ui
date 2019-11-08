@@ -766,9 +766,10 @@ export class OverviewViewComponent implements OnInit, OnDestroy
                 }
             }
             let rent_until = "";
+            console.log(article.rent_until);
             if(article.available == 0)
             {
-                rent_until = article.rent_until == 0 ? "Unbestimmte Zeit" : new Date(article.rent_until * 1000).toLocaleDateString('de-DE', dateOptions);
+                rent_until = article.rent_until == 0 || article.rent_until == null ? "Unbestimmte Zeit" : new Date(article.rent_until * 1000).toLocaleDateString('de-DE', dateOptions);
             }
             let newArticle:Object = {
                 id:article.id,

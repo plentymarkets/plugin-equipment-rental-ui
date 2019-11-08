@@ -18,48 +18,53 @@
   </terra-base-toolbar>
   <div class="col-xl-6">
     <terra-portlet inputPortletHeader="Artikel anlegen">
-      <mat-form-field class="w-100">
-        <input matInput placeholder="Artikelname" [(ngModel)]="name">
-      </mat-form-field>
-      <terra-file-input
-              inputName="Bild"
-              [(ngModel)]="image">
-      </terra-file-input>
+      <form action="">
+        <mat-form-field class="w-100" [formGroup]="createItemForm">
+          <input matInput placeholder="Artikelname" name="name" formControlName="name" required>
+          <mat-error>Der Artikelname muss gesetzt werden</mat-error>
+        </mat-form-field>
+        <terra-file-input
+                inputName="Bild"
+                [(ngModel)]="image"
+                name="image">
+        </terra-file-input>
 
-      <mat-form-field class="w-100">
-        <mat-label>Kategorie</mat-label>
-        <mat-select [(ngModel)]="category">
-          <mat-option *ngFor="let category of _selectCategory" [value]="category.value">
-            {{category.caption}}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
+        <mat-form-field class="w-100" [formGroup]="createItemForm">
+          <mat-label>Kategorie</mat-label>
+          <mat-select name="category" formControlName="category" required>
+            <mat-option *ngFor="let category of _selectCategory" [value]="category.value">
+              {{category.caption}}
+            </mat-option>
+          </mat-select>
+          <mat-error>Eine Kategorie muss gesetzt werden</mat-error>
+        </mat-form-field>
 
-      <div class="col-12" style="padding-top:10px;padding-bottom:10px;">
-        <terra-toggle [(ngModel)]="propertyToggle"></terra-toggle>
-        Eigenschaften setzen
-      </div>
+        <div class="col-12" style="padding-top:10px;padding-bottom:10px;">
+          <terra-toggle [(ngModel)]="propertyToggle" name="propertyToggle"></terra-toggle>
+          Eigenschaften setzen
+        </div>
 
-      <table class="table table-striped" *ngIf="propertyToggle">
-        <thead>
-        <tr>
-          <th>Eigenschaft</th>
-          <th>Inhalt</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr *ngFor="let property of this._statsDataService.propertyNames; let i = index">
-          <ng-container *ngIf="property != null">
-            <td>{{ property }}</td>
-            <td>
-              <mat-form-field class="w-100">
-                <input matInput #propertyInput name="{{ property }}" placeholder="{{ property }}" NgModel>
-              </mat-form-field>
-            </td>
-          </ng-container>
-        </tr>
-        </tbody>
-      </table>
+        <table class="table table-striped" *ngIf="propertyToggle">
+          <thead>
+          <tr>
+            <th>Eigenschaft</th>
+            <th>Inhalt</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let property of this._statsDataService.propertyNames; let i = index">
+            <ng-container *ngIf="property != null">
+              <td>{{ property }}</td>
+              <td>
+                <mat-form-field class="w-100">
+                  <input matInput #propertyInput name="{{ property }}" placeholder="{{ property }}" NgModel>
+                </mat-form-field>
+              </td>
+            </ng-container>
+          </tr>
+          </tbody>
+        </table>
+      </form>
     </terra-portlet>
   </div>
 </ng-template>
