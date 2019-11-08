@@ -31,6 +31,7 @@ import { SettingsViewComponent } from './views/settings/settings-view.component'
 import { OverviewDataService } from './services/overview-view.service';
 import { CreateItemComponent } from './views/create-item/create-item.component';
 import { MatSelectModule } from '@angular/material';
+import {MatInputModule} from "@angular/material/input";
 
 @NgModule({
     imports:      [
@@ -42,7 +43,8 @@ import { MatSelectModule } from '@angular/material';
         RouterModule.forRoot([]),
         TerraComponentsModule,
         routing,
-        MatSelectModule
+        MatSelectModule,
+        MatInputModule
     ],
     declarations: [
         PluginEquipmentRentalComponent,

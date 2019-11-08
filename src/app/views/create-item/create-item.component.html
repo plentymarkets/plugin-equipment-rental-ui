@@ -18,9 +18,9 @@
   </terra-base-toolbar>
   <div class="col-xl-6">
     <terra-portlet inputPortletHeader="Artikel anlegen">
-      <terra-text-input inputName="Artikelname"
-                        [(ngModel)]="name">
-      </terra-text-input>
+      <mat-form-field class="w-100">
+        <input matInput placeholder="Artikelname" [(ngModel)]="name">
+      </mat-form-field>
       <terra-file-input
               inputName="Bild"
               [(ngModel)]="image">
@@ -52,9 +52,9 @@
           <ng-container *ngIf="property != null">
             <td>{{ property }}</td>
             <td>
-              <terra-text-input #propertyInput inputName="{{ property }}"
-                                NgModel>
-              </terra-text-input>
+              <mat-form-field class="w-100">
+                <input matInput #propertyInput name="{{ property }}" placeholder="{{ property }}" NgModel>
+              </mat-form-field>
             </td>
           </ng-container>
         </tr>

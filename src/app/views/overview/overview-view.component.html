@@ -4,8 +4,9 @@
         <terra-filter (outputOnSearchBtnClicked)="onSearchBtnClicked()"
             (outputOnResetBtnClicked)="onResetBtnClicked()"
             (outputOnEnterSubmit)="onSubmit()">
-            <terra-text-input inputName="Name" [(ngModel)]="_name">
-            </terra-text-input>
+            <mat-form-field class="w-100">
+                <input matInput placeholder="Name" [(ngModel)]="_name">
+            </mat-form-field>
             <mat-form-field class="w-100">
                 <mat-label>Verfügbarkeit</mat-label>
                 <mat-select [(ngModel)]="availableFilter" [disabled]="isLoading">
@@ -104,7 +105,9 @@
                     <ng-container *ngIf="!_statsDataService._actualArticleIsRent && !isLoading">
                         <terra-portlet>
                             <h1>Artikel verleihen</h1>
-                            <terra-text-input inputName="Benutzer suchen" [(ngModel)]="searchName" (ngModelChange)="autofill($event)"></terra-text-input>
+                            <mat-form-field class="w-100">
+                                <input matInput placeholder="Benutzer suchen" [(ngModel)]="searchName" (ngModelChange)="autofill($event)">
+                            </mat-form-field>
                             <ng-template [ngIf]="autofillLoading">
                                 Loading...
                             </ng-template>
@@ -132,20 +135,30 @@
                             </ng-template>
                             <br>
 
-                            <terra-text-input inputName="Vorname*" [(ngModel)]="firstName" (ngModelChange)="emailAutocomplete($event)"></terra-text-input>
-                            <terra-text-input inputName="Nachname*" [(ngModel)]="lastName" (ngModelChange)="emailAutocomplete($event)"> </terra-text-input>
-                            <terra-text-input inputName="E-Mail*" [(ngModel)]="email"></terra-text-input>
+                            <mat-form-field class="w-100">
+                                <input matInput placeholder="Vorname" [(ngModel)]="firstName" (ngModelChange)="emailAutocomplete($event)">
+                            </mat-form-field>
+                            <mat-form-field class="w-100">
+                                <input matInput placeholder="Nachname" [(ngModel)]="lastName" (ngModelChange)="emailAutocomplete($event)">
+                            </mat-form-field>
+                            <mat-form-field class="w-100">
+                                <input matInput placeholder="E-Mail*" [(ngModel)]="email">
+                            </mat-form-field>
                             <terra-date-picker
                                     inputName="Rückgabedatum"
                                     [(ngModel)]="date">
                             </terra-date-picker>
-                            <terra-text-input inputName="Bemerkung" [(ngModel)]="comment"></terra-text-input>
+                            <mat-form-field class="w-100">
+                                <input matInput placeholder="Bemerkung" [(ngModel)]="comment">
+                            </mat-form-field>
                         </terra-portlet>
                     </ng-container>
                     <ng-container *ngIf="_statsDataService._actualArticleIsRent && !isLoading">
                         <terra-portlet>
                             <h2>Artikel zurückgeben</h2>
-                            <terra-text-input inputName="Bemerkung" [(ngModel)]="giveBackComment"></terra-text-input>
+                            <mat-form-field class="w-100">
+                                <input matInput placeholder="Bemerkung" [(ngModel)]="giveBackComment">
+                            </mat-form-field>
                             <mat-form-field class="w-100">
                                 <mat-label>Status</mat-label>
                                 <mat-select [(ngModel)]="statusOption">

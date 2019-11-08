@@ -62,12 +62,13 @@ export class CreateItemComponent implements OnInit {
       name: ''
     };
     for(let input of this.propertyInputs.toArray()){
-      if (input.innerValue === undefined){
+        input = input.nativeElement;
+      if (input.value === undefined || input.value.length === 0){
         continue;
       }
       let property = {
-        id: this.getPropertyIdByName(input.inputName),
-        name: input.innerValue
+        id: this.getPropertyIdByName(input.name),
+        name: input.value
       };
       propertyPostData.push(property);
     }
@@ -84,7 +85,7 @@ export class CreateItemComponent implements OnInit {
       return;
     }
 
-    if(this.category == "0")
+    if(this.category == "0" || this.category.length === 0)
     {
       this._alert.error("Es muss eine Kategorie ausgewählt werden");
       return;
