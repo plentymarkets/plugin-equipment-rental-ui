@@ -94,6 +94,11 @@
                                           (click)="giveBack(_statsDataService._actualArticleId)"
                             >
                             </terra-button>
+                            <terra-button
+                                    *ngIf="_statsDataService.articlesResult && _statsDataService.articlesResult[_statsDataService._actualArticleKey]"
+                                    [inputTooltipText]="'Variante Bearbeiten'"
+                                    inputIcon='icon-edit'
+                                    (click)="showVariation(_statsDataService.articlesResult[_statsDataService._actualArticleKey].itemId,_statsDataService.articlesResult[_statsDataService._actualArticleKey].id)"></terra-button>
                 </div>
                 </terra-base-toolbar>
             </div>

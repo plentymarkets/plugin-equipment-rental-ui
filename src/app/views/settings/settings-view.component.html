@@ -33,7 +33,11 @@
             </div>
         </div>
     </terra-portlet>
-
+    <terra-portlet inputPortletHeader="Autofill Option">
+        <terra-checkbox inputCaption="E-Mail automatisch befüllen"
+                        [(ngModel)]="emailAutofill">
+        </terra-checkbox>
+    </terra-portlet>
     <terra-portlet
             inputPortletHeader="E-Mail Template">
         <div class="row">

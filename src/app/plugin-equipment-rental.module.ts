@@ -31,7 +31,10 @@ import { SettingsViewComponent } from './views/settings/settings-view.component'
 import { OverviewDataService } from './services/overview-view.service';
 import { CreateItemComponent } from './views/create-item/create-item.component';
 import { MatSelectModule } from '@angular/material';
-import {MatInputModule} from "@angular/material/input";
+import { MatInputModule } from "@angular/material/input";
+import {MatDatepickerModule} from "@angular/material/datepicker";
+import {MatIconModule} from "@angular/material/icon";
+import {MatNativeDateModule} from "@angular/material/core";
 
 @NgModule({
     imports:      [
@@ -45,7 +48,11 @@ import {MatInputModule} from "@angular/material/input";
         routing,
         MatSelectModule,
         MatInputModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        MatDatepickerModule,
+        MatIconModule,
+        MatNativeDateModule,
+
     ],
     declarations: [
         PluginEquipmentRentalComponent,

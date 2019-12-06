@@ -18,7 +18,8 @@ import { RentInterface } from '../../interfaces/rent.interface';
 import { UserInterface } from '../../interfaces/user.interface';
 import { SettingsInterface } from '../../interfaces/settings.interface';
 import { OverviewDataService } from "../../services/overview-view.service";
-import {ArticleInterface} from "../../interfaces/article.interface";
+import { ArticleInterface } from "../../interfaces/article.interface";
+import {BackendActionHelper} from "../../helper/backend-action.helper";
 
 
 function isNullOrUndefined(object:any):boolean
@@ -137,6 +138,7 @@ export class OverviewViewComponent implements OnInit, OnDestroy
     private _name:string = '';
 
     private _routerSub:any;
+    contextMenu: any;
 
     constructor(
                 public _statsDataService:OverviewDataService,
@@ -339,6 +341,9 @@ export class OverviewViewComponent implements OnInit, OnDestroy
     }
 
     public emailAutocomplete(val:string):void {
+        if(isNullOrUndefined(this._statsDataService) || isNullOrUndefined(this._statsDataService.settings) || !this._statsDataService.settings.get('emailAutofill')){
+            return;
+        }
         if(this.email.indexOf('@plentymarkets.com') !== -1 && (this.firstName.length === 0 || this.lastName.length === 0))
         {
             this.email = '';
@@ -473,7 +478,7 @@ export class OverviewViewComponent implements OnInit, OnDestroy
                 this.isLoading = true;
                 this._statsDataService.getRestCallData('plugin/equipmentRental/rentalDevice/' + id).subscribe((response:any) =>
                     {
-                        if(Object.keys(response) && Object.keys(response).length > 0)
+                        if(!isNullOrUndefined(response) && Object.keys(response) && Object.keys(response).length > 0)
                         {
                             response.isAvailable = parseInt(response.isAvailable);
                             this._statsDataService.articlesRentInformation.push(
@@ -701,6 +706,7 @@ export class OverviewViewComponent implements OnInit, OnDestroy
                         this._statsDataService.articlesResult.push(
                             {
                                 id: article.id,
+                                itemId: article.itemId,
                                 name: (article.name !== null) ? article.name : 'NONAME',
                                 image: article.image,
                                 category: category,
@@ -732,6 +738,9 @@ export class OverviewViewComponent implements OnInit, OnDestroy
                     }
                     if(i === categorys.length-1){
                         this.isLoading = false;
+                        this._statsDataService.articlesResult = this._statsDataService.articlesResult.sort((a,b) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0));
+                        this._statsDataService.articlesResult = this._statsDataService.articlesResult.sort((a,b) => (a.status > b.status) ? 1 : ((b.status > a.status) ? -1 : 0));
+                        this._statsDataService.articles = this._statsDataService.articlesResult;
                     }
                     i++;
                 }, error =>
@@ -746,6 +755,9 @@ export class OverviewViewComponent implements OnInit, OnDestroy
 
     public exportCSV():void
     {
+        if(this.isLoading || !this._statsDataService.articles || this._statsDataService.articles.length === 0){
+            return;
+        }
         let dateOptions:Object = { year: 'numeric', month: '2-digit', day: '2-digit'};
         let dateName = new Date().toLocaleDateString('de-DE', dateOptions).split(".").join("-");
 
@@ -766,7 +778,6 @@ export class OverviewViewComponent implements OnInit, OnDestroy
                 }
             }
             let rent_until = "";
-            console.log(article.rent_until);
             if(article.available == 0)
             {
                 rent_until = article.rent_until == 0 || article.rent_until == null ? "Unbestimmte Zeit" : new Date(article.rent_until * 1000).toLocaleDateString('de-DE', dateOptions);
@@ -865,7 +876,8 @@ export class OverviewViewComponent implements OnInit, OnDestroy
      * @param article
      * @return string
      */
-    private getCardTooltip(article:ArticleInterface):string{
+    private getCardTooltip(article:ArticleInterface):string
+    {
         if(article.status > 0){
             return 'Nicht verfügbar: '+this._selectStatus[article.status].caption;
         }
@@ -878,7 +890,14 @@ export class OverviewViewComponent implements OnInit, OnDestroy
      * @param article
      * @return string
      */
-    private getCardClasses(article:ArticleInterface):string{
+    private getCardClasses(article:ArticleInterface):string
+    {
         return article.available == 0 ? 'rent' : 'available';
+    }
+
+    private showVariation(itemId,variationId):void
+    {
+        console.log("show variation");
+        BackendActionHelper.showItemVariation(itemId,variationId);
     }
 }

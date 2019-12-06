@@ -1,12 +1,12 @@
-import { Component } from '@angular/core';
+import {Component, ViewChild} from '@angular/core';
 import { OverviewDataService } from "../../services/overview-view.service";
 
 import {
     TerraMultiCheckBoxValueInterface,
     AlertService,
-    TerraTagInterface
+    TerraTagInterface, TerraCheckboxComponent
 }
-from '@plentymarkets/terra-components';
+    from '@plentymarkets/terra-components';
 import { SettingsInterface } from '../../interfaces/settings.interface';
 
 function isNullOrUndefined(obj:any):boolean
@@ -21,6 +21,8 @@ function isNullOrUndefined(obj:any):boolean
 
 export class SettingsViewComponent
 {
+    @ViewChild('emailAutofill')
+    public emailAutofill:TerraCheckboxComponent;
     public isLoading:boolean = false;
     public emailTemplate:string = 'E-Mail Template';
     public emailTemplateTopic:string;
@@ -33,7 +35,6 @@ export class SettingsViewComponent
 
     public saveSettingSuccess:number = 0;
     public saveSettingError:number = 0;
-
     constructor(
         private _statsDataService:OverviewDataService,
         private _alert:AlertService
@@ -58,7 +59,7 @@ export class SettingsViewComponent
                 }
                 this.emailTemplate = this.settings.get('emailTemplate');
                 this.emailTemplateTopic = this.settings.get('emailTemplateTopic');
-
+                this.emailAutofill = this.settings.get('emailAutofill');
                 this.settings.forEach((value: any,name: string) => {
                     this.oldSettings.set(name,value);
                 });
@@ -137,16 +138,15 @@ export class SettingsViewComponent
         {
             if(category.selected){
                 categorys.push(category.value);
-                this.activeCategorys.push(
-                    {
-                        name: this.getCategoryNameByid(category.value)
-                    }
-                );
+                this.activeCategorys.push({
+                    name: this.getCategoryNameByid(category.value)
+                });
             }
         }
         this.settings.set("categorys",JSON.stringify(categorys));
         this.settings.set("emailTemplate",this.emailTemplate);
         this.settings.set("emailTemplateTopic",this.emailTemplateTopic);
+        this.settings.set("emailAutofill",this.emailAutofill);
 
         this.saveSettingSuccess = 0;
         this.saveSettingError = 0;

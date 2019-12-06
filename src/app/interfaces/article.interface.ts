@@ -1,6 +1,7 @@
 export interface ArticleInterface
 {
     id?:number;
+    itemId?:number;
     name?:string;
     image?:string;
     attributes?:Object;
