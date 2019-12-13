@@ -32,6 +32,10 @@ export class ManageViewComponent
     public giveBackOption;
 
     protected readonly headerList:Array<TerraDataTableHeaderCellInterface>;
+    private filterName: string = '';
+    private filterEmail: string = '';
+
+    private data:Array<HistoryDataTableInterface> = [];
 
     constructor(
         private _statsDataService:OverviewDataService,
@@ -51,7 +55,7 @@ export class ManageViewComponent
     {
         return [
             {
-                caption: 'Name',
+                caption: 'Gerät',
                 sortBy:  'name',
                 width:   10,
                 textAlign: TerraTextAlignEnum.LEFT
@@ -59,6 +63,12 @@ export class ManageViewComponent
             {
                 caption: 'Verliehen an',
                 sortBy:  'user',
+                width:   10,
+                textAlign: TerraTextAlignEnum.LEFT
+            },
+            {
+                caption: 'Email',
+                sortBy:  'user.email',
                 width:   10,
                 textAlign: TerraTextAlignEnum.LEFT
             },
@@ -92,6 +102,7 @@ export class ManageViewComponent
 
         this._statsDataService.getRestCallData('plugin/equipmentRental/rentalDevice/getRentedDevices').subscribe((response:Array<any>) =>
             {
+                this.data = [];
                 for(let deviceHistory of response)
                 {
                     let diffTime:number = deviceHistory.rent_until * 1000 - new Date().getTime();
@@ -110,6 +121,7 @@ export class ManageViewComponent
                         deviceId: deviceHistory.deviceId
                     };
                     this._manageService.addEntry(historyItem);
+                    this.data.push(historyItem);
                     this.isLoading = true;
                 }
                 this._manageService.getResults();
@@ -206,4 +218,38 @@ export class ManageViewComponent
         return str.charAt(0).toUpperCase() + str.slice(1);
     }
 
+    /**
+     * Filter the datatable
+     */
+    public onSearchBtnClicked():void
+    {
+        let filteredData = this.data;
+
+        if(this.filterName.length > 1){
+            filteredData = this.data.filter(
+                history => history.user.firstname.concat(' '+history.user.lastname.toLowerCase()).toLowerCase().indexOf(this.filterName.toLowerCase()) > -1
+            );
+        }
+        if(this.filterEmail.length > 1){
+            filteredData = this.data.filter(
+                history => history.user.email.toLowerCase().indexOf(this.filterEmail.toLowerCase()) > -1
+            );
+        }
+
+        this._manageService.clearEntrys();
+        for(let historyItem of filteredData){
+            this._manageService.addEntry(historyItem);
+        }
+        this._manageService.getResults();
+    }
+
+    /**
+     * Reset all inputs of the filter component
+     */
+    public onResetBtnClicked():void
+    {
+        this.filterName = '';
+        this.filterEmail = '';
+        this.onSearchBtnClicked();
+    }
 }
