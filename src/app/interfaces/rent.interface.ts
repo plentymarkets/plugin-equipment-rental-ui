@@ -8,4 +8,5 @@ export interface RentInterface
     created_at?:number;
     user?:any;
     available?:number;
+    getBackDate?:number;
 }

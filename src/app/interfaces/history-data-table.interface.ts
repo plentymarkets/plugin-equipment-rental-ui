@@ -10,4 +10,5 @@ export interface HistoryDataTableInterface
     created_at?:string;
     status?:any;
     deviceId?:number;
+    getBackDate?:string | number;
 }

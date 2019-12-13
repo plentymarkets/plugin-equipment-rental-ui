@@ -320,6 +320,12 @@ export class OverviewViewComponent implements OnInit, OnDestroy
                 textAlign: TerraTextAlignEnum.CENTER
             },
             {
+                caption:   'Rückgabedatum',
+                sortBy:    'getBackDate',
+                width:     10,
+                textAlign: TerraTextAlignEnum.CENTER
+            },
+            {
                 caption:   'Status',
                 sortBy:    'status',
                 width:     10,
@@ -490,7 +496,8 @@ export class OverviewViewComponent implements OnInit, OnDestroy
                                     rent_until: response.rent_until,
                                     created_at: response.created_at,
                                     user: response.user,
-                                    available: response.isAvailable
+                                    available: response.isAvailable,
+                                    getBackDate: response.getBackDate
                                 });
                             this._statsDataService._actualArticleIsRent = response.isAvailable === 0;
                         }
@@ -715,6 +722,7 @@ export class OverviewViewComponent implements OnInit, OnDestroy
                                 available: article.isAvailable,
                                 user: article.user,
                                 rent_until: article.rent_until,
+                                getBackDate: article.getBackDate,
                                 status: parseInt(article.status)
                             });
 
@@ -852,6 +860,7 @@ export class OverviewViewComponent implements OnInit, OnDestroy
                         rent_until: deviceHistory.rent_until > 0 ?  new Date(deviceHistory.rent_until * 1000).toLocaleDateString('de-DE', dateOptions) : 'Unbestimmte Zeit',
                         created_at: new Date(deviceHistory.created_at * 1000).toLocaleDateString('de-DE', dateOptions),
                         status: this.statusToText(deviceHistory.status),
+                        getBackDate: deviceHistory.getBackDate > 0 ?  new Date(deviceHistory.getBackDate * 1000).toLocaleDateString('de-DE', dateOptions) : '',
                     };
                     this._statsDataService.history[id].push(historyItem);
                     this._historyService.addEntry(historyItem);

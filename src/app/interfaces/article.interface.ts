@@ -12,4 +12,5 @@ export interface ArticleInterface
     user?:string;
     rent_until?:number;
     status?:number;
+    getBackDate?:number;
 }
