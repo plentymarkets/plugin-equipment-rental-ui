@@ -95,7 +95,7 @@
                             >
                             </terra-button>
                             <terra-button
-                                    *ngIf="_statsDataService.articlesResult && _statsDataService.articlesResult[_statsDataService._actualArticleKey]"
+                                    *ngIf="_statsDataService.articlesResult && _statsDataService.articlesResult[_statsDataService._actualArticleKey] && !isLoading"
                                     [inputTooltipText]="'Variante Bearbeiten'"
                                     inputIcon='icon-edit'
                                     (click)="showVariation(_statsDataService.articlesResult[_statsDataService._actualArticleKey].itemId,_statsDataService.articlesResult[_statsDataService._actualArticleKey].id)"></terra-button>
