@@ -35,6 +35,8 @@ import { MatInputModule } from "@angular/material/input";
 import {MatDatepickerModule} from "@angular/material/datepicker";
 import {MatIconModule} from "@angular/material/icon";
 import {MatNativeDateModule} from "@angular/material/core";
+import { RightsViewComponent } from './views/rights/rights-view.component';
+import {RightsDetailViewComponent} from "./views/rights-detail/rights-detail-view.component";
 
 @NgModule({
     imports:      [
@@ -60,7 +62,9 @@ import {MatNativeDateModule} from "@angular/material/core";
         OverviewViewComponent,
         ManageViewComponent,
         SettingsViewComponent,
-        CreateItemComponent
+        CreateItemComponent,
+        RightsViewComponent,
+        RightsDetailViewComponent
     ],
     providers:    [
         {

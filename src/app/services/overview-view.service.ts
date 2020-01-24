@@ -39,11 +39,13 @@ export class OverviewDataService
         }
     ];
 
+    public userData = [];
+
     constructor(private http:HttpClient)
     {
         if(!environment.production)
         {
-            this.token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImQ0MWM4ZDU0MzJjODcyNzA3MWEwMjk1NWU5NjEzZDM4MTg0MTk3NDY1ZDIzZGEwNWIzZGQwN2IyM2MxNDI5Yzk1NzY3NTIwMjFkOTBiZGJkIn0.eyJhdWQiOiIxIiwianRpIjoiZDQxYzhkNTQzMmM4NzI3MDcxYTAyOTU1ZTk2MTNkMzgxODQxOTc0NjVkMjNkYTA1YjNkZDA3YjIzYzE0MjljOTU3Njc1MjAyMWQ5MGJkYmQiLCJpYXQiOjE1NzE5ODY5MjEsIm5iZiI6MTU3MTk4NjkyMSwiZXhwIjoxNTcyMDczMzIxLCJzdWIiOiIzIiwic2NvcGVzIjpbIioiXX0.AaSdMHJr_Ycben3_IBmqRzGfAhH5geRrpqzQdyOijUJJ7dLfXIVM-nHtEFywXFIGkRDMvQ38yaMwnmauvcwlQ_UHTYZyNCP6vffh7Icd8wVOMamdt3VtVxMIKsfef1MDk28TuX0HdDE5jGPTVJrzM-gAXaXbkfuPRtmxxafiVoKIWGa6fcA_ecovdnQB73N9XpkbaiCD0ZzHcm8Oi81THv__crF-_mHZWk_B1IsaHJGx6RFMhMmwVpPiZZaP_3i6pLAlBpciWQbTK9cXImlGDlm9gKBMsO2Ft0XPO9RZTTsem0qlwgpfqXaC77haV2l_03nTOL4m_5SBwI9y7J0XsQiPc0Lnj_0ORT0ilEFf4WG4ue0QvNsOWE7806Y6SFKqJUMwt1KUOFysuPA6WTWljKabG27Bn6bHttgY0yu3TOQS5WZ2MFEL0llkEaQPvYZ-qjspq1kJVbVo_-S8dB3uJmgPer0w1Ijkw3z39cdSYMRkYvczW0G85rTpttXSVDCN55Lix3tsydxp36_ic_RDIy47h0UoV0p-tgtvfPmlsLzYj8mbErazb6YJOP8F6Ki4-5EoFvVJ4LhpJG1K1g0oRiqqscDwrJJWi_ncXgYYRw1-1SnHKa9NWl1sr2JbuUEom-90j2rgHIZX0WEXhQGoHv1AHw6h8aTy0qnqpbtyEE8';
+            this.token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImp0aSI6ImQ2OTUwMTA4ZWE3ODJjNTliNjFkYWNiYTkzMjNkYjk3ZjY5NmMyYjM5NjFiZDRmZTFhMGFhNjIyNjRiOWRhNGFlOGY5ZWZkNDViM2QzZWY5In0.eyJhdWQiOiIxIiwianRpIjoiZDY5NTAxMDhlYTc4MmM1OWI2MWRhY2JhOTMyM2RiOTdmNjk2YzJiMzk2MWJkNGZlMWEwYWE2MjI2NGI5ZGE0YWU4ZjllZmQ0NWIzZDNlZjkiLCJpYXQiOjE1Nzk4NTA3NjMsIm5iZiI6MTU3OTg1MDc2MywiZXhwIjoxNTc5OTM3MTYzLCJzdWIiOiIzIiwic2NvcGVzIjpbIioiXX0.TaAComW3Uj9Yd0ruurSlVC7-e9MbU59Q3b3R2RjUDRhxEimwSLmnuj8jpbRv5Z4ZbsIk3P2XSRTgka7hQXBqmmk7PmJ952qf1keBVzvuGkXtYvNX00yiv8MDs6AIgxkoehY978LBc_Ye35lVRzZME-kcEMBekgoDcYz_Nq01q1aoad-nu3Eg8h-pV4jA2SRIapawrOBhzpoBat9vyh4_NXbU_SisJJzzMH3ofwA4HhVRWWu97x3usKlkhkesji2unK-oGy7YLm2IC2K3gHYXRvl4lz8kguXZ7dow73k97ImOZA5X2V0X056zID5MQ1mZOKCU3PUZo9fvBPKFmXOkkwJfo_8nvvkczzfbZ6u-_C3k9_K6x5gHfUZp3HqljUKXnS2CojmIBgCo_HpwYaWF4R_nJ6KkOwDZL2VIUEk1cWc1o1468f4gbkaH7dsM7-PScGOE-hzoCMaon0XiL9Lz5UjxBsKI_6Rr_lUZHNuRdwHclUeBhulvrPQckkimHSwL7BbgsZ98UqAiU8ZbIxeBRR5CL5XP19NOF4jOjaJUtYyB7Di6LPvHORHpEamoSIPm3Sl_9aUl2Z0VNy_24BYYCL4eehFDz2ciib_aYi9E-Q_Onm0znbXcUGzBMsTWNL7x7hSu7jk8l2N6_lprPiqPYVGxS-9ZTjN32M_iRSM_5z8';
             this.url = 'http://master.login.plentymarkets.com' + this.url;
             localStorage.setItem('accessToken', this.token);
         }
@@ -70,6 +72,10 @@ export class OverviewDataService
     public putRestCallData(restRoute:string, data:any):Observable <Object>
     {
         return this.http.put(this.url + '/' + restRoute, data,);
+    }
+
+    public getUsers(): Observable<any> {
+        return this.http.get(this.url + '/rest/users?columns=id,user,real_name,Ustatus');
     }
 
     public isJsonString(str:string):boolean

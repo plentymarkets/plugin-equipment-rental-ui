@@ -1,0 +1,14 @@
+<div class="row">
+  <div class="overflow-auto col-12">
+    UserId: {{ userId }}
+    <terra-base-toolbar>
+      <terra-button [inputIcon]="'icon-save'"
+                    [inputTooltipText]="'Save'">
+      </terra-button>
+    </terra-base-toolbar>
+    <terra-portlet>
+      <terra-multi-check-box [(ngModel)]="values">
+      </terra-multi-check-box>
+    </terra-portlet>
+  </div>
+</div>

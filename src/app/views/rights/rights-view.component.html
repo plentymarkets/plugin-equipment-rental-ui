@@ -1,0 +1,38 @@
+<div class="row">
+  <div class="overflow-auto col-12 col-md-3 col-lg-2">
+    <terra-filter>
+      <mat-form-field class="w-100">
+        <input matInput placeholder="ID" [(ngModel)]="userId">
+      </mat-form-field>
+      <mat-form-field class="w-100">
+        <input matInput placeholder="Name" [(ngModel)]="userName">
+      </mat-form-field>
+    </terra-filter>
+  </div>
+  <div class="overflow-auto col-12 col-md-9 col-lg-10">
+    <terra-data-table
+            [inputService]="userService"
+            [inputHasCheckboxes]="false"
+            [inputHeaderList]="headerList"
+            [inputContextMenu]="contextMenu"
+            [useContentBody]="true"
+            #manageTable
+    >
+      <tbody>
+      <tr [tcTableRow]="row" hasContextMenu [rowData]="row.data" *ngFor="let row of userService.rowList; let index = index">
+        <td>
+          {{ row.data.id }}
+        </td>
+        <td>{{ row.data.real_name }}</td>
+        <td>
+          {{ row.data.user}}
+        </td>
+        <td>
+          {{ getUserType(row.data.Ustatus) }}
+        </td>
+      </tr>
+      </tbody>
+
+    </terra-data-table>
+  </div>
+</div>

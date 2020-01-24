@@ -8,6 +8,8 @@ import { OverviewViewComponent } from "./views/overview/overview-view.component"
 import { ManageViewComponent } from "./views/manage/manage-view.component";
 import { SettingsViewComponent } from "./views/settings/settings-view.component";
 import {CreateItemComponent} from "./views/create-item/create-item.component";
+import {RightsViewComponent} from "./views/rights/rights-view.component";
+import {RightsDetailViewComponent} from "./views/rights-detail/rights-detail-view.component";
 
 const appRoutes:Routes = [
     {
@@ -57,6 +59,20 @@ const appRoutes:Routes = [
                 component: CreateItemComponent,
                 data: {
                     label: 'Artikel anlegen'
+                }
+            },
+            {
+                path: 'rights',
+                component: RightsViewComponent,
+                data: {
+                    label: 'Berechtigungen'
+                }
+            },
+            {
+                path: 'rights/:userId',
+                component: RightsDetailViewComponent,
+                data: {
+                    label: 'NONAME',
                 }
             }
         ]
