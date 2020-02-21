@@ -8,6 +8,7 @@ import { OverviewViewComponent } from "./views/overview/overview-view.component"
 import { ManageViewComponent } from "./views/manage/manage-view.component";
 import { SettingsViewComponent } from "./views/settings/settings-view.component";
 import {CreateItemComponent} from "./views/create-item/create-item.component";
+import {LogComponent} from "./views/log/log.component";
 
 const appRoutes:Routes = [
     {
@@ -57,6 +58,13 @@ const appRoutes:Routes = [
                 component: CreateItemComponent,
                 data: {
                     label: 'Artikel anlegen'
+                }
+            },
+            {
+                path: 'log',
+                component: LogComponent,
+                data: {
+                    label: 'Log'
                 }
             }
         ]

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { TerraSelectBoxValueInterface } from "@plentymarkets/terra-components";
+import {TerraPagerInterface, TerraSelectBoxValueInterface} from "@plentymarkets/terra-components";
 import { ArticleInterface } from '../interfaces/article.interface';
 import { RentInterface } from "../interfaces/rent.interface";
 import { environment } from "../../environments/environment";
@@ -83,6 +83,13 @@ export class OverviewDataService
         {
             return false;
         }
+    }
+
+    public getLogEntries(params:any):Observable<any>
+    {
+        return this.http.get(this.url + '/plugin/equipmentRental/log',{
+            params: params,
+        });
     }
 
 }

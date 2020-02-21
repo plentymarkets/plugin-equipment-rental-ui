@@ -35,6 +35,7 @@ import { MatInputModule } from "@angular/material/input";
 import {MatDatepickerModule} from "@angular/material/datepicker";
 import {MatIconModule} from "@angular/material/icon";
 import {MatNativeDateModule} from "@angular/material/core";
+import { LogComponent } from './views/log/log.component';
 
 @NgModule({
     imports:      [
@@ -60,7 +61,8 @@ import {MatNativeDateModule} from "@angular/material/core";
         OverviewViewComponent,
         ManageViewComponent,
         SettingsViewComponent,
-        CreateItemComponent
+        CreateItemComponent,
+        LogComponent
     ],
     providers:    [
         {
